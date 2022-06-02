@@ -1,0 +1,10 @@
+{
+  // DART
+  "dart.enableSdkFormatter": true,
+  "dart.lineLength": 100,
+  "dart.autoImportCompletions": true,
+  "editor.formatOnSave": true,
+  "cSpell.words": [
+    "HSDTO"
+  ]
+}

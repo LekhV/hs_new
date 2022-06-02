@@ -1,0 +1,158 @@
+{
+    "hearthstone": "Hearthstone",
+    "@hearthstone": {
+      "description": "Hearthstone"
+    },
+
+    "seeDetails": "See Details",
+    "@seeDetails": {
+      "description": "seeDetails"
+    },
+    "noData": "No data",
+    "@noData": {
+      "description": "noData"
+    },
+    "searchCards": "Search Cards",
+    "@searchCards": {
+      "description": "searchCards"
+    },
+    "classes": "Classes",
+    "@classes": {
+      "description": "classes"
+    },
+    "types": "Types",
+    "@types": {
+      "description": "types"
+    },
+    "sets": "Sets",
+    "@sets": {
+      "description": "sets"
+    },
+    "races": "Races",
+    "@races": {
+      "description": "races"
+    },
+    "qualities": "Qualities",
+    "@qualities": {
+      "description": "qualities"
+    },
+    "factions": "Factions",
+    "@factions": {
+      "description": "factions"
+    },
+    "cardBacks": "Card Backs",
+    "@cardBacks": {
+      "description": "cardBacks"
+    },
+
+    "sorrySomethingWrong": "Sorry, something went wrong",
+    "@sorrySomethingWrong": {
+      "description": "Sorry, something went wrong"
+    },
+
+    "failedFetchCardBacks": "Failed to fetch CardBacks",
+    "@failedFetchCardBacks": {
+      "description": "Failed to fetch CardBacks"
+    },
+
+    "darkMode": "Dark Mode",
+    "@darkMode": {
+      "description": "Dark Mode"
+    },
+
+    "lightMode": "Light Mode",
+    "@lightMode": {
+      "description": "Light Mode"
+    },
+
+    "howToGet": "How To Get:",
+    "@howToGet": {
+      "description": "How To Get:"
+    },
+
+    "ooopsByNoMeans": "Ooops, by no means",
+    "@ooopsByNoMeans": {
+      "description": "Ooops, by no means"
+    },
+
+    "chooseAsMain": "Сhoose as main!",
+    "@chooseAsMain": {
+      "description": "Сhoose as main!"
+    },
+    "cardbackChanged": "Cardback changed.",
+    "@cardbackChanged": {
+      "description": "Cardback changed."
+    },
+
+    "listCards": "List Cards",
+    "@listCards": {
+      "description": "List Cards"
+    },
+    
+    "failedFetchCards": "Failed to fetch Cards",
+    "@failedFetchCards": {
+      "description": "Failed to fetch Cards"
+    },
+
+    "noCardBacks": "No CardBacks",
+    "@noCardBacks": {
+      "description": "No CardBacks"
+    },
+
+    "listOf": "List of {title}",
+    "@listOf": {
+      "type": "text",
+      "placeholders": {
+        "title": {
+          "type": "String"
+        }
+      }
+    },
+    
+    "enterNameOfTheCard": "Enter the name of the card",
+    "@enterNameOfTheCard": {
+      "description": "Enter the name of the card"
+    },
+
+    "cardNotFound": "Card not found",
+    "@cardNotFound": {
+      "description": "Card not found"
+    },
+
+    "pleaseStartEnterName": "Please start enter the name of the card",
+    "@pleaseStartEnterName": {
+      "description": "Please start enter the name of the card"
+    },
+
+    "cost": "Cost",
+    "@cost": {
+      "description": "Cost"
+    },
+
+    "attack": "Attack",
+    "@attack": {
+      "description": "Attack"
+    },
+
+    "health": "Health",
+    "@health": {
+      "description": "Health"
+    },
+
+    "signIn": "Sign In",
+    "@signIn": {
+      "description": "signIn"
+    },
+
+
+    "emailAddress": "Email Address",
+    "@emailAddress": {
+      "description": "emailAddress"
+    },
+
+    "password": "Password",
+    "@password": {
+      "description": "password"
+    }
+
+}
