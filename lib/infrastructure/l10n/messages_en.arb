@@ -179,6 +179,10 @@
       "description": "signIn"
     },
 
+    "signUp": "Sign Up",
+    "@signUp": {
+      "description": "signUp"
+    },
 
     "emailAddress": "Email Address",
     "@emailAddress": {
@@ -188,6 +192,50 @@
     "password": "Password",
     "@password": {
       "description": "password"
+    },
+
+    "noUserFound": "No user found for that email.",
+    "@noUserFound": {
+      "description": "noUserFound"
+    },
+
+    "wrongPasswordProvided": "Wrong password provided for that user.",
+    "@wrongPasswordProvided": {
+      "description": "wrongPasswordProvided"
+    },
+
+    "thePasswordProvidedIsTooWeak": "The password provided is too weak.",
+    "@thePasswordProvidedIsTooWeak": {
+      "description": "thePasswordProvidedIsTooWeak"
+    },
+
+    "theAccountAlreadyExists": "The account already exists for that email.",
+    "@theAccountAlreadyExists": {
+      "description": "theAccountAlreadyExists"
+    },
+
+    "signInInvalid": "Sign In is invalid",
+    "@signInInvalid": {
+      "description": "signInInvalid"
+    },
+
+    "signUpInvalid": "Sign Up is invalid",
+    "@signUpInvalid": {
+      "description": "signUpInvalid"
+    },
+
+    "displayName": "Display name",
+    "@displayName": {
+      "description": "displayName"
+    },
+    "changeIt": "Change it",
+    "@changeIt": {
+      "description": "changeIt"
+    },
+
+    "logOut": "LogOut",
+    "@logOut": {
+      "description": "logOut"
     }
 
 }

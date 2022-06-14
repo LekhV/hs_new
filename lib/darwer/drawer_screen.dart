@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hs/application.dart';
+import 'package:flutter_hs/features/auth/bloc/login_bloc.dart';
 import 'package:flutter_hs/features/auth/login_screen.dart';
 import 'package:flutter_hs/features/cardbacks_screen/cardbacks_screen.dart';
 import 'package:flutter_hs/features/cards_screen/serach_cards_screen/search_cards_screen.dart';
 import 'package:flutter_hs/features/home_screen/home_screen.dart';
+import 'package:flutter_hs/features/user_profile/bloc/user_profile_bloc.dart';
+import 'package:flutter_hs/features/user_profile/user_profile_screen.dart';
 import 'package:flutter_hs/infrastructure/theme/app_colors.dart';
-import 'package:flutter_hs/main.dart';
 import 'package:flutter_hs/ui_kit/card_details_image.dart';
 import 'package:flutter_hs/ui_kit/custom_error_widget.dart';
 import 'package:flutter_hs/ui_kit/custom_indicator.dart';
@@ -34,13 +37,13 @@ class _DrawerScreenState extends State<DrawerScreen> with WidgetsBindingObserver
   void initState() {
     super.initState();
     BlocProvider.of<InfoHSBloc>(context).add(InfoHSFetched());
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -60,7 +63,20 @@ class _DrawerScreenState extends State<DrawerScreen> with WidgetsBindingObserver
     );
 
     final localizations = context.localizations!;
-    return BlocBuilder<InfoHSBloc, InfoHSState>(
+    return BlocConsumer<InfoHSBloc, InfoHSState>(
+      listener: (context, state) {
+        if (state is LogoutSuccess) {
+          Navigator.pop(context);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => BlocProvider<LoginBloc>(
+                  create: (BuildContext context) => LoginBloc(),
+                  child: const LoginScreen(),
+                ),
+              ),
+              (Route<dynamic> route) => false);
+        }
+      },
       builder: (context, state) {
         if (state is InfoHSInitial) {
           return const CustomIndicator();
@@ -164,14 +180,29 @@ class _DrawerScreenState extends State<DrawerScreen> with WidgetsBindingObserver
                     },
                   ),
                   ListTile(
-                    title: Text(
-                      localizations.cardBacks,
+                    title: const Text(
+                      'Profile',
                       style: defaultTextStyle,
                     ),
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider<UserProfileBloc>(
+                            create: (BuildContext context) => UserProfileBloc(),
+                            child: const UserProfileScreen(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      localizations.logOut,
+                      style: defaultTextStyle,
+                    ),
+                    onTap: () {
+                      BlocProvider.of<InfoHSBloc>(context).add(LogoutEvent());
                     },
                   ),
                 ],

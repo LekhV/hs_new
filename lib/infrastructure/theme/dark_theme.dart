@@ -15,8 +15,8 @@ const _colorTheme = ColorScheme(
   onBackground: AppColors.brown,
   surface: AppColors.orange,
   onSurface: AppColors.white,
-  primaryVariant: AppColors.orange,
-  secondaryVariant: AppColors.brown,
+  // primaryVariant: AppColors.orange,
+  // secondaryVariant: AppColors.brown,
 );
 
 // Color _getCheckboxCheckedColor(Set<MaterialState> states) {

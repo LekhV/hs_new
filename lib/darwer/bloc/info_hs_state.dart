@@ -32,3 +32,5 @@ class InfoHSSuccess extends InfoHSState {
   @override
   String toString() => 'InfoHSSuccess { InfoHSs: ${infoHSs.toString()}, }';
 }
+
+class LogoutSuccess extends InfoHSState {}

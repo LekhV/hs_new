@@ -35,3 +35,4 @@ class PersistStorage {
 final PersistStorage persistStorage = PersistStorage();
 
 const String PREFERENCES_CARDBACK = '@feb_cardback';
+const String USER_TOKEN = '@user_token';

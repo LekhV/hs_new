@@ -11,3 +11,10 @@ class SignInEvent extends LoginEvent {
 
   SignInEvent(this.email, this.password);
 }
+
+class SignUpEvent extends LoginEvent {
+  final String email;
+  final String password;
+
+  SignUpEvent(this.email, this.password);
+}

@@ -1,14 +1,25 @@
 import 'package:equatable/equatable.dart';
 
-abstract class LoginState extends Equatable {
-  const LoginState();
+enum LoginStateEnum { init, success, error }
+
+class LoginState extends Equatable {
+  final LoginStateEnum? loginState;
+  final Object? error;
+
+  const LoginState({
+    this.loginState = LoginStateEnum.init,
+    this.error,
+  });
+
+  LoginState copyWith({
+    LoginStateEnum? loginState = LoginStateEnum.init,
+    Object? error,
+  }) =>
+      LoginState(
+        loginState: loginState ?? this.loginState,
+        error: error ?? this.error,
+      );
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [loginState, error];
 }
-
-class LoginInitial extends LoginState {}
-
-class LoginFailure extends LoginState {}
-
-class LoginSuccess extends LoginState {}
