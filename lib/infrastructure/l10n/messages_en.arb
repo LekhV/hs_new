@@ -4,6 +4,41 @@
       "description": "Hearthstone"
     },
 
+    "add": "Add",
+    "@add": {
+      "description": "Add"
+    },
+
+    "delete": "Delete",
+    "@delete": {
+      "description": "Delete"
+    },
+
+    "checkCardsCollection": "Check Cards Collection",
+    "@checkCardsCollection": {
+      "description": "Check Cards Collection"
+    },
+
+    "cardsCollections": "Cards Collections",
+    "@cardsCollections": {
+      "description": "Cards Collections"
+    },
+
+    "createCardsCollection": "Create Cards Collection",
+    "@createCardsCollection": {
+      "description": "Create Cards Collection"
+    },
+
+    "showCardsCollections": "Show Cards Collections",
+    "@showCardsCollections": {
+      "description": "Show Cards Collections"
+    },
+
+    "collections": "Collections",
+    "@collections": {
+      "description": "Collections"
+    },
+
     "seeDetails": "See Details",
     "@seeDetails": {
       "description": "seeDetails"
