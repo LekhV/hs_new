@@ -46,4 +46,7 @@ class CardByParams {
   String? img;
   String? imgGold;
   String? locale;
+
+  factory CardByParams.fromJson(Map<String, dynamic> json) => _$CardByParamsFromJson(json);
+  Map<String, dynamic> toJson() => _$CardByParamsToJson(this);
 }

@@ -28,7 +28,7 @@ class _EmailTextFieldState extends State<EmailTextField> {
   Widget build(BuildContext context) {
     final isError =
         !focusNode.hasFocus && _controller.text.isNotEmpty && !validateEmail(_controller.text);
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       controller: _controller,

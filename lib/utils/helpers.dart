@@ -19,7 +19,11 @@ InputDecoration buildInputDecoration({
         color: withError ? AppColors.red : AppColors.white,
       ),
     ),
-    contentPadding: const EdgeInsetsDirectional.only(bottom: 12),
+    contentPadding: const EdgeInsetsDirectional.only(
+      bottom: 12,
+      start: 10,
+      end: 10,
+    ),
     suffixIcon: suffixIcon,
   );
 }

@@ -6,6 +6,8 @@ import 'package:flutter_hs/features/auth/bloc/login_bloc.dart';
 import 'package:flutter_hs/features/auth/login_screen.dart';
 import 'package:flutter_hs/features/cardbacks_screen/cardbacks_screen.dart';
 import 'package:flutter_hs/features/cards_screen/serach_cards_screen/search_cards_screen.dart';
+import 'package:flutter_hs/features/collections/bloc/cards_collections_bloc.dart';
+import 'package:flutter_hs/features/collections/main_collections_screen.dart';
 import 'package:flutter_hs/features/home_screen/home_screen.dart';
 import 'package:flutter_hs/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:flutter_hs/features/user_profile/user_profile_screen.dart';
@@ -16,6 +18,8 @@ import 'package:flutter_hs/ui_kit/custom_indicator.dart';
 import 'package:flutter_hs/utils/localizations_extension.dart';
 
 import '../config.dart';
+import '../features/collections/bloc/cards_collections_event.dart';
+import '../features/collections/collection_content_enum.dart';
 import 'bloc/info_hs_bloc.dart';
 import 'bloc/info_hs_event.dart';
 import 'bloc/info_hs_state.dart';
@@ -135,6 +139,29 @@ class _DrawerScreenState extends State<DrawerScreen> with WidgetsBindingObserver
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.of(context).push(SearchCardsScreen.getRoute());
+                    },
+                  ),
+                  ListTile(
+                    title: const Text(
+                      'Collections',
+                      style: defaultTextStyle,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider<CardsCollectionsBloc>(
+                            create: (BuildContext context) => CardsCollectionsBloc()
+                              ..add(
+                                const ChangeContent(
+                                  typeContent: CollectionsContentEnum.initialScreen,
+                                ),
+                              ),
+                            child: MainCollectionsScreen(classes: state.infoHSs?.classes ?? []),
+                          ),
+                        ),
+                      );
                     },
                   ),
                   _itemDrawer(

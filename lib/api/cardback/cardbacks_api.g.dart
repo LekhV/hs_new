@@ -6,6 +6,8 @@ part of 'cardbacks_api.dart';
 // RetrofitGenerator
 // **************************************************************************
 
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 class _CardBacksApi implements CardBacksApi {
   _CardBacksApi(this._dio, {this.baseUrl});
 
