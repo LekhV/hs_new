@@ -162,18 +162,6 @@ class _DrawerScreenState extends State<DrawerScreen> with WidgetsBindingObserver
                           ),
                         ),
                       );
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (context) =>
-
-                      //         CollectionDetailsScreen(classes: state.infoHSs?.classes ?? []),
-
-                      //     // BlocProvider<CardsCollectionsBloc>(
-                      //     //   create: (BuildContext context) => CardsCollectionsBloc(),
-                      //     //   child: CollectionDetailsScreen(classes: state.infoHSs?.classes ?? []),
-                      //     // ),
-                      //   ),
-                      // );
                     },
                   ),
                   _itemDrawer(
