@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_hs/features/cards_screen/widgets/item_list_widget.dart';
+import 'package:flutter_hs/features/collections/widgets/item_card_widget.dart';
 import 'package:flutter_hs/ui_kit/background_container.dart';
 import 'package:flutter_hs/ui_kit/custom_error_widget.dart';
 
@@ -13,27 +13,25 @@ import '../bloc/cards_collections_bloc.dart';
 import '../bloc/cards_collections_event.dart';
 import '../bloc/cards_collections_state.dart';
 
-class OldCollectionsScreen extends StatefulWidget {
-  const OldCollectionsScreen({
+class AllCards extends StatefulWidget {
+  const AllCards({
     required this.parameter,
-    required this.title,
-    required this.classes,
+    this.nameCollection,
     Key? key,
   }) : super(key: key);
 
   final String parameter;
-  final String title;
-  final List<String> classes;
+  final String? nameCollection;
 
   @override
-  _OldCollectionsScreenState createState() => _OldCollectionsScreenState();
+  _AllCardsState createState() => _AllCardsState();
 }
 
-class _OldCollectionsScreenState extends State<OldCollectionsScreen> {
+class _AllCardsState extends State<AllCards> {
   @override
   void initState() {
     super.initState();
-    context.read<CardsCollectionsBloc>().add(CardsFetched(parameter: widget.parameter));
+    BlocProvider.of<CardsCollectionsBloc>(context).add(CardsFetched(parameter: widget.parameter));
   }
 
   @override
@@ -57,35 +55,18 @@ class _OldCollectionsScreenState extends State<OldCollectionsScreen> {
               child: Column(
                 children: [
                   AppBar(
-                    title: Text(localizations.listOf(widget.title)),
+                    title: Text(localizations.listOf(state.parameter)),
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
-                    actions: [
-                      PopupMenuButton<String>(
-                        itemBuilder: (context) => widget.classes
-                            .map(
-                              (item) => PopupMenuItem(
-                                value: item,
-                                child: Text(item),
-                              ),
-                            )
-                            .toList(),
-                        onSelected: (item) {
-                          BlocProvider.of<CardsCollectionsBloc>(context)
-                              .add(CardsFetched(parameter: item));
-                        },
-                      ),
-                    ],
                   ),
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: state.listCards!.length,
-                      itemBuilder: (_, i) => state.listCards![i].img != null
-                          ? ItemListCardsWidget(
-                              cardByParams: state.listCards![i],
-                            )
-                          : Container(),
+                      itemBuilder: (_, i) => ItemCardWidget(
+                        nameCollection: widget.nameCollection ?? state.nameCollection,
+                        card: state.listCards![i],
+                      ),
                     ),
                   ),
                 ],

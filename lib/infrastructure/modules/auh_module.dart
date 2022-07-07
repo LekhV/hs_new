@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 @module
 abstract class AuthModule {
   @lazySingleton
-  AuthRepository getCardBacksRepository() {
+  AuthRepository getAuthRepository() {
     return AuthRepositoryImpl();
   }
 }
