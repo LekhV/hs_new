@@ -19,6 +19,8 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
             collectionsState: CollectionsStateEnum.success,
             listCards: listCards,
             parameter: event.parameter,
+            iShowDialog: event.isShowDialog,
+            nameCollection: event.isShowDialog ? '' : state.nameCollection,
           ),
         );
       } catch (e) {
@@ -66,6 +68,48 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
       }
+    });
+
+    on<GetCollections>((event, emit) async {
+      emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
+      try {
+        // TODO: Get  Collectionы in BD
+
+        emit(
+          state.copyWith(
+            parameter: event.heroType,
+            //listCollections: listCollections,
+            collectionsState: CollectionsStateEnum.success,
+          ),
+        );
+      } catch (e) {
+        emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
+      }
+    });
+
+    on<DeleteCardsCollection>((event, emit) async {
+      emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
+      try {
+        // TODO: Delete  collection in BD
+
+        emit(
+          state.copyWith(
+            // cardsCollection: [],
+            // listCollections: listCollections,
+            collectionsState: CollectionsStateEnum.success,
+            isDeletedCollection: true,
+          ),
+        );
+      } catch (e) {
+        emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
+      }
+    });
+
+    on<ChangeContent>((event, emit) {
+      emit(state.copyWith(
+        collectionsState: CollectionsStateEnum.success,
+        content: event.typeContent,
+      ));
     });
   }
 }

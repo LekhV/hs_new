@@ -6,11 +6,14 @@ class CircleButtonWidget extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
+  final bool isLoad;
+
   const CircleButtonWidget({
     Key? key,
     required this.title,
     required this.text,
     required this.onTap,
+    this.isLoad = false,
   }) : super(key: key);
 
   @override
@@ -39,14 +42,20 @@ class CircleButtonWidget extends StatelessWidget {
             ),
             width: 42,
             height: 42,
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: isLoad
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).backgroundColor,
+                    ),
+                  )
+                : Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
           ),
         ],
       ),

@@ -34,8 +34,8 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Widget child = MaterialApp(
       themeMode: _themeMode,
-      theme: getLightTheme(context),
-      darkTheme: getDarkTheme(context),
+      theme: getDarkTheme(context),
+      darkTheme: getLightTheme(context),
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       home: BlocProvider<InfoHSBloc>(

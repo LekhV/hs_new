@@ -13,6 +13,8 @@ import 'package:flutter_hs/ui_kit/custom_indicator.dart';
 import 'package:flutter_hs/utils/localizations_extension.dart';
 
 import '../config.dart';
+
+import '../features/collections/main_collections_screen.dart';
 import 'bloc/info_hs_bloc.dart';
 import 'bloc/info_hs_event.dart';
 import 'bloc/info_hs_state.dart';
@@ -34,13 +36,13 @@ class _DrawerScreenState extends State<DrawerScreen> with WidgetsBindingObserver
   void initState() {
     super.initState();
     BlocProvider.of<InfoHSBloc>(context).add(InfoHSFetched());
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -119,6 +121,18 @@ class _DrawerScreenState extends State<DrawerScreen> with WidgetsBindingObserver
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.of(context).push(SearchCardsScreen.getRoute());
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      localizations.collections,
+                      style: defaultTextStyle,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(
+                        MainCollectionsScreen.getRoute(state.infoHSs?.classes ?? []),
+                      );
                     },
                   ),
                   _itemDrawer(
