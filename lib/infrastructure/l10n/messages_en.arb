@@ -188,6 +188,61 @@
     "password": "Password",
     "@password": {
       "description": "password"
+    },
+
+    "collections": "Collections",
+    "@collections": {
+      "description": "collections"
+    },
+
+    "nameCollection": "Name collection",
+    "@nameCollection": {
+      "description": "nameCollection"
+    },
+
+    "addNameCollection": "Add name collection'",
+    "@addNameCollection": {
+      "description": "addNameCollection"
+    },
+
+    "cancel": "Cancel",
+    "@cancel": {
+      "description": "cancel"
+    },
+
+    "ok": "OK",
+    "@ok": {
+      "description": "ok"
+    },
+
+    "cardCollectionLimit10": "Card collection limit 10",
+    "@cardCollectionLimit10": {
+      "description": "cardCollectionLimit10"
+    },
+
+    "limitCardsOneType2": "Limit of cards of one type 2",
+    "@limitCardsOneType2": {
+      "description": "limitCardsOneType2"
+    },
+
+    "collectionWithSameName": "Collection with the same name has already been created",
+    "@collectionWithSameName": {
+      "description": "collectionWithSameName"
+    },
+
+    "thisCardNotAddYet": "This card not add yet",
+    "@thisCardNotAddYet": {
+      "description": "thisCardNotAddYet"
+    },
+
+    "collectionIsEmpty": "Collection is Empty, please add card in Collection",
+    "@collectionIsEmpty": {
+      "description": "collectionIsEmpty"
+    },
+
+    "collectionsDidNotCreate": "Collections did not create.",
+    "@collectionsDidNotCreate": {
+      "description": "collectionsDidNotCreate"
     }
 
 }
