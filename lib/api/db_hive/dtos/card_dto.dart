@@ -1,10 +1,10 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:hive/hive.dart';
 
-part 'card_by_params.g.dart';
+part 'card_dto.g.dart';
 
-@JsonSerializable()
-class CardByParams {
-  CardByParams({
+@HiveType(typeId: 2)
+class CardDTO extends HiveObject {
+  CardDTO({
     this.cardId,
     this.dbfId,
     this.name,
@@ -24,29 +24,62 @@ class CardByParams {
     this.img,
     this.imgGold,
     this.locale,
-    //this.mechanics,
   });
 
+  @HiveField(0)
   String? cardId;
-  String? dbfId;
-  String? name;
-  String? cardSet;
-  String? type;
-  String? faction;
-  String? rarity;
-  int? cost;
-  int? attack;
-  int? health;
-  String? text;
-  String? flavor;
-  String? artist;
-  bool? collectible;
-  bool? elite;
-  String? playerClass;
-  String? img;
-  String? imgGold;
-  String? locale;
 
-  factory CardByParams.fromJson(Map<String, dynamic> json) => _$CardByParamsFromJson(json);
-  Map<String, dynamic> toJson() => _$CardByParamsToJson(this);
+  @HiveField(1)
+  String? dbfId;
+
+  @HiveField(2)
+  String? name;
+
+  @HiveField(3)
+  String? cardSet;
+
+  @HiveField(4)
+  String? type;
+
+  @HiveField(5)
+  String? faction;
+
+  @HiveField(6)
+  String? rarity;
+
+  @HiveField(7)
+  int? cost;
+
+  @HiveField(8)
+  int? attack;
+
+  @HiveField(9)
+  int? health;
+
+  @HiveField(10)
+  String? text;
+
+  @HiveField(11)
+  String? flavor;
+
+  @HiveField(12)
+  String? artist;
+
+  @HiveField(13)
+  bool? collectible;
+
+  @HiveField(14)
+  bool? elite;
+
+  @HiveField(15)
+  String? playerClass;
+
+  @HiveField(16)
+  String? img;
+
+  @HiveField(17)
+  String? imgGold;
+
+  @HiveField(18)
+  String? locale;
 }
