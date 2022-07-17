@@ -140,7 +140,7 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
           await Future.delayed(const Duration(milliseconds: 300), () {});
           final cardsCollection = await _dbHiveRepository.deleteCard(
             nameCollection,
-            event.card,
+            event.cardId,
             state.parameter,
           );
 

@@ -10,7 +10,7 @@ import 'circle_button_widget.dart';
 
 class ItemCardWidget extends StatelessWidget {
   final CardByParams card;
-
+  final String cardId;
   final String nameCollection;
   final bool isLoadAdd;
   final bool isLoadDelete;
@@ -19,6 +19,7 @@ class ItemCardWidget extends StatelessWidget {
     Key? key,
     required this.card,
     this.nameCollection = '',
+    this.cardId = '',
     this.isLoadAdd = false,
     this.isLoadDelete = false,
   }) : super(key: key);
@@ -57,7 +58,11 @@ class ItemCardWidget extends StatelessWidget {
                       onTap: () {
                         //TODO: delete card
                         BlocProvider.of<CardsCollectionsBloc>(context).add(
-                          DeleteCard(nameCollection: nameCollection, card: card),
+                          DeleteCard(
+                            nameCollection: nameCollection,
+                            cardId: cardId.isEmpty ? card.cardId! : cardId,
+                            card: card,
+                          ),
                         );
                       },
                     ),

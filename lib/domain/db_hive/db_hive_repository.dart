@@ -11,7 +11,7 @@ abstract class DBHiveRepository {
   );
   Future<List<CollectionCard>> deleteCard(
     String nameCollection,
-    CardByParams card,
+    String cardId,
     String heroType,
   );
   Future<void> deleteCollection(String nameCollection, String heroType);

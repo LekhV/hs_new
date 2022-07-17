@@ -53,18 +53,19 @@ class CollectionScreen extends StatelessWidget {
               itemBuilder: (_, i) {
                 bool isLoadAdd = false;
                 bool isLoadDelete = false;
-                final card = state.cardsCollection![i].card;
+                final collectionCard = state.cardsCollection![i];
                 if (state.collectionsState == CollectionsStateEnum.loadAdd) {
-                  isLoadAdd = state.card == card;
+                  isLoadAdd = state.card == collectionCard.card;
                 }
 
                 if (state.collectionsState == CollectionsStateEnum.loadDelete) {
-                  isLoadDelete = state.card == card;
+                  isLoadDelete = state.card == collectionCard.card;
                 }
 
                 return ItemCardWidget(
                   nameCollection: state.nameCollection,
-                  card: card,
+                  card: collectionCard.card,
+                  cardId: collectionCard.collectionCardId,
                   isLoadAdd: isLoadAdd,
                   isLoadDelete: isLoadDelete,
                 );

@@ -1,3 +1,4 @@
+import 'package:flutter_hs/config.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
 import 'package:flutter_hs/domain/common/exceptions.dart';
 import 'package:flutter_hs/domain/db_hive/db_hive_repository.dart';
@@ -8,6 +9,8 @@ import '../../api/db_hive/dtos/collection_model_dto.dart';
 import 'package:flutter_hs/data/db_hive/mappers/db_hive_mappers.dart';
 
 class DBHiveRepositoryImpl implements DBHiveRepository {
+  final String hiveCollection = config.hiveCollection;
+
   @override
   Future<List<CollectionCard>> createCollection(
     String nameCollection,
@@ -15,7 +18,7 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
     String heroType,
   ) async {
     try {
-      var box = await Hive.openBox('CollectionsHSs');
+      var box = await Hive.openBox(hiveCollection);
 
       List<CollectionModel> collectionsList = [];
       List<CollectionCard> cardsList = [CollectionCard(card: card, collectionCardId: card.cardId!)];
@@ -34,17 +37,25 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
         );
 
         if (index != -1) {
-          cardsList.addAll(collectionsList[index].collectionCards ?? []);
+          cardsList = collectionsList[index].collectionCards ?? [];
 
           if (cardsList.length > 10) {
             throw const CollectionLimitExceededException();
           }
 
           final checkList = cardsList
-              .where((collectionCard) => collectionCard.collectionCardId == card.cardId)
+              .where((collectionCard) =>
+                  collectionCard.collectionCardId == card.cardId ||
+                  collectionCard.collectionCardId == '${card.cardId} ${card.cardId}')
               .toList();
 
-          if (checkList.length > 2) {
+          if (checkList.isEmpty) {
+            cardsList.add(CollectionCard(card: card, collectionCardId: card.cardId!));
+          } else if (checkList.length == 1) {
+            cardsList.add(
+              CollectionCard(card: card, collectionCardId: '${card.cardId} ${card.cardId}'),
+            );
+          } else if (checkList.length == 2) {
             throw const CardsLimitExceededException();
           }
 
@@ -71,11 +82,11 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
   @override
   Future<List<CollectionCard>> deleteCard(
     String nameCollection,
-    CardByParams card,
+    String cardId,
     String heroType,
   ) async {
     try {
-      var box = await Hive.openBox('CollectionsHSs');
+      var box = await Hive.openBox(hiveCollection);
       List<CollectionModel> collectionsList = [];
       List<CollectionCard> cardsList = [];
 
@@ -91,16 +102,15 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
         if (index != -1) {
           cardsList = collectionsList[index].collectionCards ?? [];
 
-          final collectionCard = cardsList.firstWhere(
-            (element) => element.collectionCardId == card.cardId,
-            orElse: () => CollectionCard(card: card, collectionCardId: ''),
-          );
+          final checkList = cardsList
+              .where((collectionCard) => collectionCard.collectionCardId == cardId)
+              .toList();
 
-          if (collectionCard.collectionCardId.isEmpty) {
+          if (checkList.isEmpty) {
             throw const NoElementException();
           }
 
-          cardsList.remove(collectionCard);
+          cardsList.removeWhere((collectionCard) => collectionCard.collectionCardId == cardId);
 
           collectionsList[index] = CollectionModel(
             heroType: collectionsList[index].heroType,
@@ -126,7 +136,7 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
   @override
   Future<void> deleteCollection(String nameCollection, String heroType) async {
     try {
-      var box = await Hive.openBox('CollectionsHSs');
+      var box = await Hive.openBox(hiveCollection);
       List<CollectionModel> collectionsList = [];
 
       List collections = await box.get(heroType, defaultValue: []);
@@ -145,7 +155,7 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
   @override
   Future<List<CollectionCard>> getCollection(String nameCollection, String heroType) async {
     try {
-      var box = await Hive.openBox('CollectionsHSs');
+      var box = await Hive.openBox(hiveCollection);
       List<CollectionModel> collectionsList = [];
       List<CollectionCard> cardsList = [];
 
@@ -168,7 +178,7 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
   @override
   Future<List<CollectionModel>> getCollections(String heroType) async {
     try {
-      var box = await Hive.openBox('CollectionsHSs');
+      var box = await Hive.openBox(hiveCollection);
       List<CollectionModelDTO> collectionsListDTO = [];
       List<CollectionModel> collectionsList = [];
 
