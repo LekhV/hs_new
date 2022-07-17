@@ -118,7 +118,7 @@ class _AllCardCollectionScreenState extends State<AllCardCollectionScreen> {
                   if (widget.state.nameCollection.isNotEmpty) {
                     //TODO:  get collection
                     bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.collection));
-                    // bloc.add(GetCardsCollection(nameCollection: widget.state.nameCollection));
+                    bloc.add(GetCardsCollection(nameCollection: widget.state.nameCollection));
                   } else {
                     _showMessage(context, localizations.collectionsDidNotCreate);
                   }

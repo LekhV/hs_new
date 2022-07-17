@@ -27,7 +27,9 @@ class CreateCollection extends CardsCollectionsEvent {
 
 class AddCard extends CardsCollectionsEvent {
   final CardByParams card;
-  const AddCard({required this.card});
+  final String nameCollection;
+
+  const AddCard({required this.card, required this.nameCollection});
 
   @override
   List<Object> get props => [];
@@ -35,13 +37,19 @@ class AddCard extends CardsCollectionsEvent {
 
 class DeleteCard extends CardsCollectionsEvent {
   final CardByParams card;
-  const DeleteCard({required this.card});
+  final String nameCollection;
+
+  const DeleteCard({required this.card, required this.nameCollection});
 
   @override
   List<Object> get props => [];
 }
 
 class GetCardsCollection extends CardsCollectionsEvent {
+  final String nameCollection;
+
+  const GetCardsCollection({required this.nameCollection});
+
   @override
   List<Object> get props => [];
 }
