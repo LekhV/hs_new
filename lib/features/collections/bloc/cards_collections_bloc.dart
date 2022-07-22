@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_hs/domain/cards/cards_repository.dart';
+import 'package:flutter_hs/domain/db_sqlite/db_sqlite_repository.dart';
 
 import 'package:get_it/get_it.dart';
 
@@ -8,6 +9,7 @@ import 'cards_collections_state.dart';
 
 class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsState> {
   final _cardsRepository = GetIt.instance.get<CardsRepository>();
+  final _dbSQLiteRepository = GetIt.instance.get<DBSQLiteRepository>();
 
   CardsCollectionsBloc() : super(const CardsCollectionsState()) {
     on<CardsFetched>((event, emit) async {
@@ -31,9 +33,16 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<AddCard>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
+        final nameCollection = 'new Collection9'; //state.nameCollection;
+        final cardsCollection = await _dbSQLiteRepository.createCollection(
+          nameCollection,
+          event.card,
+          state.parameter,
+        );
         // TODO: Add Card in BD
         emit(
           state.copyWith(
+            cardsCollection: cardsCollection,
             collectionsState: CollectionsStateEnum.success,
           ),
         );
