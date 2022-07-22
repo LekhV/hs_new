@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
 import 'package:flutter_hs/features/cards_screen/widgets/item_list_widget.dart';
 import 'package:flutter_hs/utils/localizations_extension.dart';
 
+import '../bloc/cards_collections_bloc.dart';
+import '../bloc/cards_collections_event.dart';
 import 'circle_button_widget.dart';
 
 class ItemCardWidget extends StatelessWidget {
@@ -41,9 +44,9 @@ class ItemCardWidget extends StatelessWidget {
                       isLoad: isLoadAdd,
                       onTap: () {
                         //TODO: add card
-                        // BlocProvider.of<CardsCollectionsBloc>(context).add(
-                        //   AddCard(nameCollection: nameCollection, card: card),
-                        // );
+                        BlocProvider.of<CardsCollectionsBloc>(context).add(
+                          AddCard(card: card),
+                        );
                       },
                     ),
                     const SizedBox(height: 15),

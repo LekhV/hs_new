@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
+import 'package:flutter_hs/domain/db_sqlite/models/collection_card_model.dart';
 
 import '../collection_content_enum.dart';
 
@@ -12,7 +13,7 @@ class CardsCollectionsState extends Equatable {
 
   final CardByParams? card;
   final List<CardByParams>? listCards;
-  // final List<CollectionCard>? cardsCollection;
+  final List<CollectionCard>? cardsCollection;
   // final List<CollectionsModel>? listCollections;
 
   final String parameter;
@@ -29,7 +30,7 @@ class CardsCollectionsState extends Equatable {
     this.parameter = '',
     this.nameCollection = '',
     this.card,
-    // this.cardsCollection,
+    this.cardsCollection,
     // this.listCollections,
     this.isShowRule = false,
     this.iShowDialog = false,
@@ -43,7 +44,7 @@ class CardsCollectionsState extends Equatable {
     String? parameter,
     String? nameCollection,
     CardByParams? card,
-    // List<CollectionCard>? cardsCollection,
+    List<CollectionCard>? cardsCollection,
     // List<CollectionsModel>? listCollections,
     bool? isShowRule,
     bool? isDeletedCollection,
@@ -57,7 +58,7 @@ class CardsCollectionsState extends Equatable {
         parameter: parameter ?? this.parameter,
         nameCollection: nameCollection ?? this.nameCollection,
         card: card ?? this.card,
-        // cardsCollection: cardsCollection ?? this.cardsCollection,
+        cardsCollection: cardsCollection ?? this.cardsCollection,
         // listCollections: listCollections ?? this.listCollections,
         isShowRule: isShowRule ?? false,
         iShowDialog: iShowDialog ?? false,

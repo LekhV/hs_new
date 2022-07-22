@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../db_sqlite/models/collection_card_model.dart';
+
 part 'card_by_params.g.dart';
 
 @JsonSerializable()
@@ -46,4 +48,7 @@ class CardByParams {
   String? img;
   String? imgGold;
   String? locale;
+
+  factory CardByParams.fromJson(Map<String, dynamic> json) => _$CardByParamsFromJson(json);
+  Map<String, dynamic> toJson() => _$CardByParamsToJson(this);
 }
