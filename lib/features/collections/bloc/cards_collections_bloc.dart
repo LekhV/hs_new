@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_hs/domain/cards/cards_repository.dart';
 import 'package:flutter_hs/domain/db_hive/db_hive_repository.dart';
+import 'package:flutter_hs/domain/db_sqlite/db_sqlite_repository.dart';
 
 import 'package:get_it/get_it.dart';
 
@@ -10,7 +11,8 @@ import 'cards_collections_state.dart';
 
 class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsState> {
   final _cardsRepository = GetIt.instance.get<CardsRepository>();
-  final _dbHiveRepository = GetIt.instance.get<DBHiveRepository>();
+  final _dbRepository = // GetIt.instance.get<DBHiveRepository>();
+      GetIt.instance.get<DBSQLiteRepository>();
 
   CardsCollectionsBloc() : super(const CardsCollectionsState()) {
     on<CardsFetched>((event, emit) async {
@@ -34,7 +36,7 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<CreateCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        final listCollections = await _dbHiveRepository.getCollections(state.parameter);
+        final listCollections = await _dbRepository.getCollections(state.parameter);
         final listName = listCollections.map((e) => e.nameCollection).toList();
         String checkSameCollection = listName.firstWhere(
           (element) => element == event.nameCollection,
@@ -87,11 +89,12 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
               event.nameCollection.isEmpty ? state.nameCollection : event.nameCollection;
           // TODO: need future becouse show animaion
           await Future.delayed(const Duration(milliseconds: 300), () {});
-          final cardsCollection = await _dbHiveRepository.createCollection(
+          final cardsCollection = await _dbRepository.createCollection(
             nameCollection,
             event.card,
             state.parameter,
           );
+
           emit(
             state.copyWith(
               cardsCollection: cardsCollection,
@@ -138,10 +141,11 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
           // TODO: need future becouse show animaion
 
           await Future.delayed(const Duration(milliseconds: 300), () {});
-          final cardsCollection = await _dbHiveRepository.deleteCard(
-            nameCollection,
-            event.cardId,
-            state.parameter,
+          final cardsCollection = await _dbRepository.deleteCard(
+            nameCollection: nameCollection,
+            heroType: state.parameter,
+            card: event.card,
+            cardId: event.cardId,
           );
 
           emit(
@@ -168,7 +172,7 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<GetCardsCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        final cardsCollection = await _dbHiveRepository.getCollection(
+        final cardsCollection = await _dbRepository.getCollection(
           event.nameCollection,
           state.parameter,
         );
@@ -191,7 +195,7 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<GetCollections>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        final listCollections = await _dbHiveRepository.getCollections(event.heroType);
+        final listCollections = await _dbRepository.getCollections(event.heroType);
 
         emit(
           state.copyWith(
@@ -208,8 +212,8 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<DeleteCardsCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        await _dbHiveRepository.deleteCollection(event.nameCollection ?? '', state.parameter);
-        final listCollections = await _dbHiveRepository.getCollections(state.parameter);
+        await _dbRepository.deleteCollection(event.nameCollection ?? '', state.parameter);
+        final listCollections = await _dbRepository.getCollections(state.parameter);
 
         emit(
           state.copyWith(

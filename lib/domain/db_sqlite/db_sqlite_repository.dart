@@ -1,9 +1,8 @@
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
 import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
 
-import '../collections/models/db_collection_model.dart';
-
-abstract class DBHiveRepository {
+abstract class DBSQLiteRepository {
   Future<List<CollectionCard>> createCollection(
     String nameCollection,
     CardByParams card,
@@ -13,7 +12,7 @@ abstract class DBHiveRepository {
     required String nameCollection,
     required String heroType,
     required CardByParams card,
-    String? cardId,
+    int? cardId,
   });
   Future<void> deleteCollection(String nameCollection, String heroType);
 

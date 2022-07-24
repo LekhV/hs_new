@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'collection_card_model.dart';
+part of 'db_collection_card_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -8,7 +8,7 @@ part of 'collection_card_model.dart';
 
 CollectionCard _$CollectionCardFromJson(Map<String, dynamic> json) =>
     CollectionCard(
-      collectionCardId: json['collectionCardId'] as String,
+      collectionCardId: json['collectionCardId'],
       card: CardByParams.fromJson(json['card'] as Map<String, dynamic>),
     );
 

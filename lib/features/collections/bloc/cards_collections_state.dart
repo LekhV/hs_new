@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
-import 'package:flutter_hs/domain/db_hive/models/collection_model.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
 
-import '../../../domain/db_hive/models/collection_card_model.dart';
 import '../collection_content_enum.dart';
 
 enum CollectionsStateEnum { init, loadAdd, loadDelete, success, error }

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
-import 'package:flutter_hs/domain/db_hive/models/collection_card_model.dart';
+import 'package:flutter_hs/domain/db_hive/models/hive_collection_card_model.dart';
 
 import '../collection_content_enum.dart';
 
@@ -38,7 +38,7 @@ class AddCard extends CardsCollectionsEvent {
 
 class DeleteCard extends CardsCollectionsEvent {
   final CardByParams card;
-  final String cardId;
+  final dynamic cardId;
   final String nameCollection;
 
   const DeleteCard({required this.card, required this.cardId, required this.nameCollection});

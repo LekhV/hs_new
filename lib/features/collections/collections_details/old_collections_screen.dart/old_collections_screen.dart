@@ -77,7 +77,7 @@ class _OldCollectionsScreenState extends State<OldCollectionsScreen> {
             children: [
               Expanded(child: Text(widget.state.listCollections?[i].nameCollection ?? '')),
               const SizedBox(width: 10),
-              Text('${widget.state.listCollections?[i].collectionCards!.length.toString()}/10'),
+              Text('${widget.state.listCollections?[i].collectionCardsLenght!.toString()}/10'),
               const Icon(Icons.arrow_right, color: AppColors.white)
             ],
           ),
