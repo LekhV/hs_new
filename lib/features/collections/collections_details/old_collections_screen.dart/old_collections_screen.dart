@@ -51,7 +51,9 @@ class _OldCollectionsScreenState extends State<OldCollectionsScreen> {
         if (widget.state.listCollections == null || widget.state.listCollections!.isEmpty) ...{
           const CollectionErrorWidget(),
         } else ...{
-          _contentBuild(context),
+          Expanded(
+            child: _contentBuild(context),
+          ),
         }
       ],
     );
@@ -61,23 +63,23 @@ class _OldCollectionsScreenState extends State<OldCollectionsScreen> {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: widget.state.listCollections!.length,
-      itemBuilder: (_, i) => Padding(
+      itemBuilder: (_, index) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: InkWell(
           onTap: () {
             bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.oldCollection));
             bloc.add(
               GetCardsCollection(
-                nameCollection: widget.state.listCollections?[i].nameCollection ?? '',
+                nameCollection: widget.state.listCollections?[index].nameCollection ?? '',
               ),
             );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: Text(widget.state.listCollections?[i].nameCollection ?? '')),
+              Expanded(child: Text(widget.state.listCollections?[index].nameCollection ?? '')),
               const SizedBox(width: 10),
-              Text('${widget.state.listCollections?[i].collectionCardsLenght!.toString()}/10'),
+              Text('${widget.state.listCollections?[index].collectionCardsLenght.toString()}/10'),
               const Icon(Icons.arrow_right, color: AppColors.white)
             ],
           ),

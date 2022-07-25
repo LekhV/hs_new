@@ -39,7 +39,7 @@ class _AllCardCollectionScreenState extends State<AllCardCollectionScreen> {
   @override
   void initState() {
     super.initState();
-    title = widget.classes.isNotEmpty
+    title = widget.state.parameter.isEmpty
         ? widget.classes.first
         : widget.nameCollection ?? widget.state.parameter;
   }
@@ -55,10 +55,10 @@ class _AllCardCollectionScreenState extends State<AllCardCollectionScreen> {
               : CollectionsContentEnum.oldCollection,
           classes: widget.classes,
           onPressActions: (item) {
-            bloc.add(CardsFetched(parameter: item, isShowDialog: widget.isShowButton));
             setState(() {
               title = item;
             });
+            bloc.add(CardsFetched(parameter: item, isShowDialog: widget.isShowButton));
           },
         ),
         if (widget.state.listCards!.isEmpty) ...{

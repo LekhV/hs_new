@@ -1,4 +1,3 @@
-import 'package:flutter_hs/domain/db_hive/models/hive_collection_card_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'db_collection_model.g.dart';

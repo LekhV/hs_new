@@ -10,6 +10,7 @@ class CollectionCardDTO extends HiveObject {
     required this.collectionCardId,
     required this.card,
   });
+
   @HiveField(0)
   String collectionCardId;
   @HiveField(1)

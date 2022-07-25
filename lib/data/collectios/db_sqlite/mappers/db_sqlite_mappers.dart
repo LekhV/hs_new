@@ -1,10 +1,9 @@
-import 'package:flutter_hs/api/db_sqlite/dtos/sql_collection_card_dto.dart';
+import 'package:flutter_hs/api/collections/db_sqlite/dtos/sql_collection_card_dto.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
+import 'package:flutter_hs/domain/collections/db_sqlite/models/sqlite_collection_card.dart';
+import 'package:flutter_hs/domain/collections/db_sqlite/models/sqlite_collection_model.dart';
 import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
 import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
-import 'package:flutter_hs/domain/db_hive/models/hive_collection_card_model.dart';
-import 'package:flutter_hs/domain/db_sqlite/models/sqlite_collection_card.dart';
-import 'package:flutter_hs/domain/db_sqlite/models/sqlite_collection_model.dart';
 
 extension CardMapper on CardByParams {
   SQLiteCollectionCardDTO toDTO({required int collectionModelId}) {
@@ -23,8 +22,16 @@ extension CardMapper on CardByParams {
       text: text,
       flavor: flavor,
       artist: artist,
-      collectible: collectible,
-      elite: elite,
+      collectible: collectible != null
+          ? collectible!
+              ? 1
+              : 0
+          : null,
+      elite: elite != null
+          ? elite!
+              ? 1
+              : 0
+          : null,
       playerClass: playerClass,
       img: img,
       imgGold: imgGold,
@@ -52,8 +59,16 @@ extension SQLiteCardDTOMapper on SQLiteCollectionCardDTO {
         text: text,
         flavor: flavor,
         artist: artist,
-        collectible: collectible,
-        elite: elite,
+        collectible: collectible != null
+            ? collectible == 0
+                ? false
+                : true
+            : null,
+        elite: elite != null
+            ? elite == 0
+                ? false
+                : true
+            : null,
         playerClass: playerClass,
         img: img,
         imgGold: imgGold,
@@ -65,7 +80,7 @@ extension SQLiteCardDTOMapper on SQLiteCollectionCardDTO {
 
 extension SQLiteCollectionCardsDTOMappers on List<SQLiteCollectionCardDTO> {
   List<SQLiteCollectionCard> toModels() {
-    return map((cardByParamsDTO) => cardByParamsDTO.toModel()).toList();
+    return map((cardDTO) => cardDTO.toModel()).toList();
   }
 }
 

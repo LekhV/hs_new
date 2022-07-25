@@ -48,7 +48,6 @@ class CardsCollectionsState extends Equatable {
     List<CollectionCard>? cardsCollection,
     List<CollectionModel>? listCollections,
     bool? isShowRule,
-    bool? isDeletedCollection,
     bool? iShowDialog,
     CollectionsContentEnum? content,
   }) =>

@@ -1,12 +1,11 @@
-import 'package:flutter_hs/api/db_hive/dtos/card_dto.dart';
+import 'package:flutter_hs/api/collections/db_hive/dtos/card_dto.dart';
+import 'package:flutter_hs/api/collections/db_hive/dtos/collection_card_dto.dart';
+import 'package:flutter_hs/api/collections/db_hive/dtos/collection_model_dto.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
+import 'package:flutter_hs/domain/collections/db_hive/models/hive_collection_card_model.dart';
+import 'package:flutter_hs/domain/collections/db_hive/models/hive_collection_model.dart';
 import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
 import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
-
-import '../../../api/db_hive/dtos/collection_card_dto.dart';
-import '../../../api/db_hive/dtos/collection_model_dto.dart';
-import '../../../domain/db_hive/models/hive_collection_card_model.dart';
-import '../../../domain/db_hive/models/hive_collection_model.dart';
 
 extension CardDTOMapper on CardDTO {
   CardByParams toModel() {
@@ -36,7 +35,7 @@ extension CardDTOMapper on CardDTO {
 
 extension CardDTOMappers on List<CardDTO> {
   List<CardByParams> toModels() {
-    return map((cardByParamsDTO) => cardByParamsDTO.toModel()).toList();
+    return map((cardDTO) => cardDTO.toModel()).toList();
   }
 }
 
@@ -51,7 +50,7 @@ extension CollectionCardDTOMapper on CollectionCardDTO {
 
 extension CollectionCardDTOMappers on List<CollectionCardDTO> {
   List<HiveCollectionCard> toModels() {
-    return map((collectionCards) => collectionCards.toModel()).toList();
+    return map((collectionCard) => collectionCard.toModel()).toList();
   }
 }
 
@@ -98,7 +97,7 @@ extension HiveCollectionCardMapper on HiveCollectionCard {
 
 extension HiveCollectionCardMappers on List<HiveCollectionCard> {
   List<CollectionCardDTO> toDTOs() {
-    return map((collectionCards) => collectionCards.toDTO()).toList();
+    return map((collectionCard) => collectionCard.toDTO()).toList();
   }
 }
 
@@ -114,7 +113,7 @@ extension HiveCollectionModelDTOMapper on CollectionModelDTO {
 
 extension HiveCollectionModelDTOMappers on List<CollectionModelDTO> {
   List<HiveCollectionModel> toModels() {
-    return map((cardByParamsDTO) => cardByParamsDTO.toModel()).toList();
+    return map((collection) => collection.toModel()).toList();
   }
 }
 

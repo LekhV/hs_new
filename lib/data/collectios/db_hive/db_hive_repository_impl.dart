@@ -1,15 +1,16 @@
 import 'package:flutter_hs/config.dart';
+import 'package:flutter_hs/data/collectios/db_hive/mappers/db_hive_mappers.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
+import 'package:flutter_hs/domain/collections/db_hive/db_hive_repository.dart';
+import 'package:flutter_hs/domain/collections/db_hive/models/hive_collection_card_model.dart';
+import 'package:flutter_hs/domain/collections/db_hive/models/hive_collection_model.dart';
 import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
 import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
 import 'package:flutter_hs/domain/common/exceptions.dart';
-import 'package:flutter_hs/domain/db_hive/db_hive_repository.dart';
-import 'package:flutter_hs/domain/db_hive/models/hive_collection_model.dart';
-import 'package:hive/hive.dart';
-import '../../api/db_hive/dtos/collection_model_dto.dart';
-import 'package:flutter_hs/data/db_hive/mappers/db_hive_mappers.dart';
 
-import '../../domain/db_hive/models/hive_collection_card_model.dart';
+import 'package:hive/hive.dart';
+
+import '../../../api/collections/db_hive/dtos/collection_model_dto.dart';
 
 class DBHiveRepositoryImpl implements DBHiveRepository {
   final String hiveCollection = config.hiveCollection;
@@ -163,6 +164,8 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
       collectionsList.removeWhere((element) => element.nameCollection == nameCollection);
 
       await box.put(heroType, collectionsList.toDTOs());
+
+      
     } catch (e) {
       rethrow;
     }

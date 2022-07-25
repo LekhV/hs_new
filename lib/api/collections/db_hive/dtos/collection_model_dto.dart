@@ -11,6 +11,7 @@ class CollectionModelDTO extends HiveObject {
     required this.heroType,
     this.collectionCards,
   });
+
   @HiveField(0)
   final String nameCollection;
   @HiveField(1)

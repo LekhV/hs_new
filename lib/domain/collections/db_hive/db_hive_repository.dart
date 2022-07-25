@@ -1,7 +1,7 @@
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
-import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
 
-import '../collections/models/db_collection_model.dart';
+import '../models/db_collection_card_model.dart';
+import '../models/db_collection_model.dart';
 
 abstract class DBHiveRepository {
   Future<List<CollectionCard>> createCollection(

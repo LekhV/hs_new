@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_hs/domain/cards/cards_repository.dart';
-import 'package:flutter_hs/domain/db_hive/db_hive_repository.dart';
-import 'package:flutter_hs/domain/db_sqlite/db_sqlite_repository.dart';
+import 'package:flutter_hs/domain/collections/db_hive/db_hive_repository.dart';
+import 'package:flutter_hs/domain/collections/db_sqlite/db_sqlite_repository.dart';
 
 import 'package:get_it/get_it.dart';
 
@@ -11,7 +11,7 @@ import 'cards_collections_state.dart';
 
 class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsState> {
   final _cardsRepository = GetIt.instance.get<CardsRepository>();
-  final _dbRepository = // GetIt.instance.get<DBHiveRepository>();
+  final _dbRepository = //GetIt.instance.get<DBHiveRepository>();
       GetIt.instance.get<DBSQLiteRepository>();
 
   CardsCollectionsBloc() : super(const CardsCollectionsState()) {
@@ -201,6 +201,7 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
           state.copyWith(
             parameter: event.heroType,
             listCollections: listCollections,
+            cardsCollection: [],
             collectionsState: CollectionsStateEnum.success,
           ),
         );
@@ -213,16 +214,7 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
         await _dbRepository.deleteCollection(event.nameCollection ?? '', state.parameter);
-        final listCollections = await _dbRepository.getCollections(state.parameter);
-
-        emit(
-          state.copyWith(
-            cardsCollection: [],
-            listCollections: listCollections,
-            collectionsState: CollectionsStateEnum.success,
-            isDeletedCollection: true,
-          ),
-        );
+        add(GetCollections(state.parameter));
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
       }

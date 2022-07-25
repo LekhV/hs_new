@@ -1,11 +1,10 @@
-import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'sql_collection_card_dto.g.dart';
 
 @JsonSerializable()
-class SQLiteCollectionCardDTO implements CardByParams {
+class SQLiteCollectionCardDTO {
   final int? collectionCardId;
   final int? collectionModelId;
 
@@ -35,62 +34,44 @@ class SQLiteCollectionCardDTO implements CardByParams {
 
   factory SQLiteCollectionCardDTO.fromJson(Map<String, dynamic> json) =>
       _$SQLiteCollectionCardDTOFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$SQLiteCollectionCardDTOToJson(this);
 
-  @override
-  String? artist;
+  final String? artist;
 
-  @override
-  int? attack;
+  final int? attack;
 
-  @override
-  String? cardId;
+  final String? cardId;
 
-  @override
-  String? cardSet;
+  final String? cardSet;
 
-  @override
-  bool? collectible;
+  final int? cost;
 
-  @override
-  int? cost;
+  final String? dbfId;
 
-  @override
-  String? dbfId;
+  final int? collectible;
 
-  @override
-  bool? elite;
+  final int? elite;
 
-  @override
-  String? faction;
+  final String? faction;
 
-  @override
-  String? flavor;
+  final String? flavor;
 
-  @override
-  int? health;
+  final int? health;
 
-  @override
-  String? img;
+  final String? img;
 
-  @override
-  String? imgGold;
+  final String? imgGold;
 
-  @override
-  String? locale;
+  final String? locale;
 
-  @override
-  String? name;
+  final String? name;
 
-  @override
-  String? playerClass;
+  final String? playerClass;
 
-  @override
-  String? rarity;
+  final String? rarity;
 
-  @override
-  String? text;
+  final String? text;
 
-  @override
-  String? type;
+  final String? type;
 }
