@@ -3,7 +3,7 @@ import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
 import '../models/db_collection_card_model.dart';
 import '../models/db_collection_model.dart';
 
-abstract class DBHiveRepository {
+abstract class DBRealmRepository {
   Future<List<CollectionCard>> createCollection(
     String nameCollection,
     CardByParams card,

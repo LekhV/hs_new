@@ -1,4 +1,3 @@
-import 'package:flutter_hs/config.dart';
 import 'package:flutter_hs/data/collectios/db_hive/mappers/db_hive_mappers.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
 import 'package:flutter_hs/domain/collections/db_hive/db_hive_repository.dart';
@@ -8,13 +7,10 @@ import 'package:flutter_hs/domain/collections/models/db_collection_card_model.da
 import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
 import 'package:flutter_hs/domain/common/exceptions.dart';
 
-import 'package:hive/hive.dart';
-
 import '../../../api/collections/db_hive/dtos/collection_model_dto.dart';
+import 'database_hive_helper.dart';
 
 class DBHiveRepositoryImpl implements DBHiveRepository {
-  final String hiveCollection = config.hiveCollection;
-
   @override
   Future<List<CollectionCard>> createCollection(
     String nameCollection,
@@ -22,22 +18,18 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
     String heroType,
   ) async {
     try {
-      var box = await Hive.openBox(hiveCollection);
+      var box = await hiveHelper.hiveBox;
 
-      List<HiveCollectionModel> collectionsList = [];
-      List<HiveCollectionCard> cardsList = [
-        HiveCollectionCard(card: card, collectionCardId: card.cardId!)
-      ];
+      List<HiveCollectionCard> cardsList = [];
 
       HiveCollectionModel newCollection = HiveCollectionModel(
         heroType: heroType,
         nameCollection: nameCollection,
-        collectionCards: cardsList,
+        collectionCards: [HiveCollectionCard(card: card, collectionCardId: card.cardId!)],
       );
-      List collections = await box.get(heroType, defaultValue: []);
+      final collectionsList = await _getHiveCollections(heroType);
 
-      if (collections.isNotEmpty) {
-        collectionsList = collections.map((e) => e as CollectionModelDTO).toList().toModels();
+      if (collectionsList.isNotEmpty) {
         final index = collectionsList.indexWhere(
           (element) => element.nameCollection == nameCollection,
         );
@@ -94,58 +86,52 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
   }) async {
     String id = cardId ?? card.cardId!;
     try {
-      var box = await Hive.openBox(hiveCollection);
-      List<HiveCollectionModel> collectionsList = [];
+      var box = await hiveHelper.hiveBox;
       List<HiveCollectionCard> cardsList = [];
 
-      List collections = await box.get(heroType, defaultValue: []);
+      final collectionsList = await _getHiveCollections(heroType);
 
-      if (collections.isNotEmpty) {
-        collectionsList = collections.map((e) => e as CollectionModelDTO).toList().toModels();
+      final index = collectionsList.indexWhere(
+        (element) => element.nameCollection == nameCollection,
+      );
 
-        final index = collectionsList.indexWhere(
-          (element) => element.nameCollection == nameCollection,
-        );
+      if (index != -1) {
+        cardsList = collectionsList[index].collectionCards ?? [];
 
-        if (index != -1) {
-          cardsList = collectionsList[index].collectionCards ?? [];
+        final checkList = cardsList
+            .where((collectionCard) =>
+                collectionCard.collectionCardId == id ||
+                collectionCard.collectionCardId == '$id $id')
+            .toList();
 
-          final checkList = cardsList
-              .where((collectionCard) =>
-                  collectionCard.collectionCardId == id ||
-                  collectionCard.collectionCardId == '$id $id')
-              .toList();
-
-          if (cardId != null) {
-            cardsList.removeWhere((collectionCard) => collectionCard.collectionCardId == cardId);
-          } else {
-            if (checkList.isEmpty) {
-              throw const NoElementException();
-            }
-            cardsList.removeWhere((collectionCard) => checkList.length == 1
-                ? collectionCard.collectionCardId == id
-                : collectionCard.collectionCardId == '$id $id');
-          }
-
-          collectionsList[index] = HiveCollectionModel(
-            heroType: collectionsList[index].heroType,
-            nameCollection: collectionsList[index].nameCollection,
-            collectionCards: cardsList,
-          );
+        if (cardId != null) {
+          cardsList.removeWhere((collectionCard) => collectionCard.collectionCardId == cardId);
         } else {
-          throw const NoElementException();
+          if (checkList.isEmpty) {
+            throw const NoElementException();
+          }
+          cardsList.removeWhere((collectionCard) => checkList.length == 1
+              ? collectionCard.collectionCardId == id
+              : collectionCard.collectionCardId == '$id $id');
         }
 
-        if (cardsList.isEmpty) {
-          collectionsList.removeWhere((element) => element.nameCollection == nameCollection);
-        }
-
-        await box.put(heroType, collectionsList.toDTOs());
+        collectionsList[index] = HiveCollectionModel(
+          heroType: collectionsList[index].heroType,
+          nameCollection: collectionsList[index].nameCollection,
+          collectionCards: cardsList,
+        );
+      } else {
+        throw const NoElementException();
       }
+
+      if (cardsList.isEmpty) {
+        collectionsList.removeWhere((element) => element.nameCollection == nameCollection);
+      }
+
+      await box.put(heroType, collectionsList.toDTOs());
 
       return cardsList.toModels();
     } catch (e) {
-      print("Failed to delete card: $e");
       rethrow;
     }
   }
@@ -153,19 +139,15 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
   @override
   Future<void> deleteCollection(String nameCollection, String heroType) async {
     try {
-      var box = await Hive.openBox(hiveCollection);
-      List<HiveCollectionModel> collectionsList = [];
+      var box = await hiveHelper.hiveBox;
 
-      List collections = await box.get(heroType, defaultValue: []);
-      if (collections.isEmpty) {
+      final collectionsList = await _getHiveCollections(heroType);
+      if (collectionsList.isEmpty) {
         throw const NoElementException();
       }
-      collectionsList = collections.map((e) => e as CollectionModelDTO).toList().toModels();
       collectionsList.removeWhere((element) => element.nameCollection == nameCollection);
 
       await box.put(heroType, collectionsList.toDTOs());
-
-      
     } catch (e) {
       rethrow;
     }
@@ -174,19 +156,12 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
   @override
   Future<List<CollectionCard>> getCollection(String nameCollection, String heroType) async {
     try {
-      var box = await Hive.openBox(hiveCollection);
-      List<HiveCollectionModel> collectionsList = [];
       List<HiveCollectionCard> cardsList = [];
-
-      List collections = await box.get(heroType, defaultValue: []);
-
-      if (collections.isNotEmpty) {
-        collectionsList = collections.map((e) => e as CollectionModelDTO).toList().toModels();
-        cardsList = collectionsList
-                .firstWhere((element) => element.nameCollection == nameCollection)
-                .collectionCards ??
-            [];
-      }
+      final collectionsList = await _getHiveCollections(heroType);
+      cardsList = collectionsList
+              .firstWhere((element) => element.nameCollection == nameCollection)
+              .collectionCards ??
+          [];
 
       return cardsList.toModels();
     } catch (e) {
@@ -197,18 +172,35 @@ class DBHiveRepositoryImpl implements DBHiveRepository {
   @override
   Future<List<CollectionModel>> getCollections(String heroType) async {
     try {
-      var box = await Hive.openBox(hiveCollection);
-      List<CollectionModelDTO> collectionsListDTO = [];
+      final collectionsList = await _getHiveCollections(heroType);
+
+      return collectionsList.toModels();
+    } catch (e) {
+      throw UnimplementedError();
+    }
+  }
+
+  @override
+  Future<List<String>> getNamesAllCollections(String heroType) async {
+    try {
+      final collectionsList = await _getHiveCollections(heroType);
+
+      return collectionsList.toModels().map((e) => e.nameCollection).toList();
+    } catch (e) {
+      throw UnimplementedError();
+    }
+  }
+
+  Future<List<HiveCollectionModel>> _getHiveCollections(String heroType) async {
+    try {
+      var box = await hiveHelper.hiveBox;
       List<HiveCollectionModel> collectionsList = [];
 
       List collections = await box.get(heroType, defaultValue: []);
-
       if (collections.isNotEmpty) {
-        collectionsListDTO = collections.map((e) => e as CollectionModelDTO).toList();
-        collectionsList = collectionsListDTO.toModels();
+        collectionsList = collections.map((e) => e as CollectionModelDTO).toList().toModels();
       }
-
-      return collectionsList.toModels();
+      return collectionsList;
     } catch (e) {
       throw UnimplementedError();
     }

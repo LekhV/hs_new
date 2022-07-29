@@ -202,4 +202,19 @@ class DBSQLiteRepositoryImpl implements DBSQLiteRepository {
       throw UnimplementedError();
     }
   }
+
+  @override
+  Future<List<String>> getNamesAllCollections(String heroType) async {
+    try {
+      Database db = await sqliteHelper.database;
+      final sqliteCollections = await db.query(
+        collectionsTableName,
+      );
+      final collections =
+          sqliteCollections.map((card) => SQLiteCollectionModel.fromJson(card)).toList().toModels();
+      return collections.map((e) => e.nameCollection).toList();
+    } catch (e) {
+      throw UnimplementedError();
+    }
+  }
 }

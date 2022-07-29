@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "31.0.0"
+    version: "42.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.0"
+    version: "4.3.0"
   archive:
     dependency: transitive
     description:
@@ -64,6 +64,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.0"
+  build_cli_annotations:
+    dependency: transitive
+    description:
+      name: build_cli_annotations
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   build_config:
     dependency: transitive
     description:
@@ -84,7 +91,7 @@ packages:
       name: build_resolvers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.8"
   build_runner:
     dependency: "direct dev"
     description:
@@ -134,13 +141,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  cli_util:
-    dependency: transitive
-    description:
-      name: cli_util
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.5"
   clock:
     dependency: transitive
     description:
@@ -203,7 +203,7 @@ packages:
       name: dart_style
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.3"
   diff_match_patch:
     dependency: transitive
     description:
@@ -408,7 +408,7 @@ packages:
       name: injectable_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.2"
+    version: "1.5.4"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -526,6 +526,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  objectid:
+    dependency: transitive
+    description:
+      name: objectid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   package_config:
     dependency: transitive
     description:
@@ -666,6 +673,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
+  realm:
+    dependency: "direct main"
+    description:
+      name: realm
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1+beta"
+  realm_common:
+    dependency: transitive
+    description:
+      name: realm_common
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1+beta"
+  realm_generator:
+    dependency: transitive
+    description:
+      name: realm_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1+beta"
   retrofit:
     dependency: "direct main"
     description:
@@ -679,7 +707,14 @@ packages:
       name: retrofit_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1+1"
+    version: "4.0.3"
+  sane_uuid:
+    dependency: transitive
+    description:
+      name: sane_uuid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-alpha.4"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -860,6 +895,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0+2"
+  tar:
+    dependency: transitive
+    description:
+      name: tar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.5+1"
   term_glyph:
     dependency: transitive
     description:
@@ -873,7 +915,7 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.20.2"
+    version: "1.21.1"
   test_api:
     dependency: transitive
     description:
@@ -887,7 +929,7 @@ packages:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.11"
+    version: "0.4.13"
   timing:
     dependency: transitive
     description:
@@ -980,5 +1022,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.17.0-0 <3.0.0"
+  dart: ">=2.17.0 <3.0.0"
   flutter: ">=3.0.0"

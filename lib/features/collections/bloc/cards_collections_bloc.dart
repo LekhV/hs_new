@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_hs/domain/cards/cards_repository.dart';
 import 'package:flutter_hs/domain/collections/db_hive/db_hive_repository.dart';
+import 'package:flutter_hs/domain/collections/db_realm/db_realm_repository.dart';
 import 'package:flutter_hs/domain/collections/db_sqlite/db_sqlite_repository.dart';
 
 import 'package:get_it/get_it.dart';
@@ -11,8 +12,9 @@ import 'cards_collections_state.dart';
 
 class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsState> {
   final _cardsRepository = GetIt.instance.get<CardsRepository>();
-  final _dbRepository = //GetIt.instance.get<DBHiveRepository>();
-      GetIt.instance.get<DBSQLiteRepository>();
+  final _dbRepository = GetIt.instance.get<DBHiveRepository>();
+  //GetIt.instance.get<DBSQLiteRepository>();
+  //GetIt.instance.get<DBRealmRepository>();
 
   CardsCollectionsBloc() : super(const CardsCollectionsState()) {
     on<CardsFetched>((event, emit) async {
@@ -36,8 +38,7 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<CreateCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        final listCollections = await _dbRepository.getCollections(state.parameter);
-        final listName = listCollections.map((e) => e.nameCollection).toList();
+        final listName = await _dbRepository.getNamesAllCollections(state.parameter);
         String checkSameCollection = listName.firstWhere(
           (element) => element == event.nameCollection,
           orElse: () => '',
