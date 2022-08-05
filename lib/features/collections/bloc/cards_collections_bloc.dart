@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_hs/domain/cards/cards_repository.dart';
+import 'package:flutter_hs/domain/collections/db_drift/db_drift_repository.dart';
 import 'package:flutter_hs/domain/collections/db_hive/db_hive_repository.dart';
 import 'package:flutter_hs/domain/collections/db_realm/db_realm_repository.dart';
 import 'package:flutter_hs/domain/collections/db_sqlite/db_sqlite_repository.dart';
@@ -12,9 +13,10 @@ import 'cards_collections_state.dart';
 
 class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsState> {
   final _cardsRepository = GetIt.instance.get<CardsRepository>();
-  final _dbRepository = GetIt.instance.get<DBHiveRepository>();
-  //GetIt.instance.get<DBSQLiteRepository>();
-  //GetIt.instance.get<DBRealmRepository>();
+  final _dbRepository = //GetIt.instance.get<DBHiveRepository>();
+      // GetIt.instance.get<DBSQLiteRepository>();
+      //GetIt.instance.get<DBRealmRepository>();
+      GetIt.instance.get<DBDriftRepository>();
 
   CardsCollectionsBloc() : super(const CardsCollectionsState()) {
     on<CardsFetched>((event, emit) async {
@@ -214,8 +216,9 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<DeleteCardsCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        await _dbRepository.deleteCollection(event.nameCollection ?? '', state.parameter);
-        add(GetCollections(state.parameter));
+        await _dbRepository
+            .deleteCollection(event.nameCollection ?? '', state.parameter)
+            .then((value) => add(GetCollections(state.parameter)));
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
       }

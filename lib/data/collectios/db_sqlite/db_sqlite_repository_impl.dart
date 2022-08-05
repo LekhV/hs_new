@@ -24,13 +24,13 @@ class DBSQLiteRepositoryImpl implements DBSQLiteRepository {
   }) async {
     try {
       Database db = await sqliteHelper.database;
+      final collectionId = await _getIdCollection(nameCollection, heroType);
 
       if (cardId != null) {
         await db.delete(cardsTableName, where: "${sqliteHelper.collectionCardId} LIKE '$cardId'");
       } else {
         //TODO: check 0 and delete when 0 items
         Database db = await sqliteHelper.database;
-        final collectionId = await _getIdCollection(nameCollection, heroType);
 
         final checkList = await _getSQLiteCards(db, collectionId).then((collection) =>
             collection.where((collection) => collection.card?.cardId == card.cardId).toList());
@@ -43,9 +43,12 @@ class DBSQLiteRepositoryImpl implements DBSQLiteRepository {
       }
 
       final cardsCollection = await getCollection(nameCollection, heroType);
+      await _updateCollection(collectionId, cardsCollection.length);
+
       if (cardsCollection.isEmpty) {
         deleteCollection(nameCollection, heroType);
       }
+
       return cardsCollection;
     } catch (e) {
       rethrow;

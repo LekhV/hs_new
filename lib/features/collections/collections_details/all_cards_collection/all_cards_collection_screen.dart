@@ -115,12 +115,13 @@ class _AllCardCollectionScreenState extends State<AllCardCollectionScreen> {
                   ),
                 ),
                 onPressed: () {
-                  if (widget.state.nameCollection.isNotEmpty) {
-                    //TODO:  get collection
+                  if (widget.state.nameCollection.isEmpty ||
+                      widget.state.cardsCollection == null ||
+                      widget.state.cardsCollection!.isEmpty) {
+                    _showMessage(context, localizations.collectionsDidNotCreate);
+                  } else {
                     bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.collection));
                     bloc.add(GetCardsCollection(nameCollection: widget.state.nameCollection));
-                  } else {
-                    _showMessage(context, localizations.collectionsDidNotCreate);
                   }
                 },
               ),
