@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hs/infrastructure/injectable.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:path_provider/path_provider.dart';
 import 'darwer/bloc/info_hs_bloc.dart';
 import 'darwer/drawer_screen.dart';
 import 'infrastructure/theme/dark_theme.dart';
 import 'infrastructure/theme/light_theme.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //final directory = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter();
+
   configureDependencies();
   runApp(const MyApp());
 }

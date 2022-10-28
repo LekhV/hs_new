@@ -1,13 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_hs/domain/cards/cards_repository.dart';
+import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
+import 'package:flutter_hs/domain/collections/db_drift/db_drift_repository.dart';
+import 'package:flutter_hs/domain/collections/db_hive/db_hive_repository.dart';
+import 'package:flutter_hs/domain/collections/db_realm/db_realm_repository.dart';
+import 'package:flutter_hs/domain/collections/db_sqlite/db_sqlite_repository.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
 
 import 'package:get_it/get_it.dart';
 
+import '../../../domain/common/exceptions.dart';
 import 'cards_collections_event.dart';
 import 'cards_collections_state.dart';
 
 class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsState> {
   final _cardsRepository = GetIt.instance.get<CardsRepository>();
+  final _dbRepository = //GetIt.instance.get<DBHiveRepository>();
+      // GetIt.instance.get<DBSQLiteRepository>();
+      //GetIt.instance.get<DBRealmRepository>();
+      GetIt.instance.get<DBDriftRepository>();
 
   CardsCollectionsBloc() : super(const CardsCollectionsState()) {
     on<CardsFetched>((event, emit) async {
@@ -28,29 +39,136 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
       }
     });
 
-    on<AddCard>((event, emit) async {
+    on<CreateCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        // TODO: Add Card in BD
-        emit(
-          state.copyWith(
-            collectionsState: CollectionsStateEnum.success,
-          ),
+        final listName = await _dbRepository.getNamesAllCollections(state.parameter);
+        String checkSameCollection = listName.firstWhere(
+          (element) => element == event.nameCollection,
+          orElse: () => '',
         );
+
+        if (checkSameCollection.isNotEmpty) {
+          emit(
+            state.copyWith(
+              nameCollection: '',
+              collectionsState: CollectionsStateEnum.success,
+              isShowRule: true,
+              error: const SameCardsException(),
+              card: null,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              nameCollection: event.nameCollection,
+              collectionsState: CollectionsStateEnum.success,
+            ),
+          );
+        }
+
+        if (event.card != null) {
+          add(AddCard(card: event.card!, nameCollection: event.nameCollection));
+        }
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
       }
     });
 
-    on<DeleteCard>((event, emit) async {
+    on<AddCard>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
-      try {
-        // TODO: Delete Card in BD
+
+      if (state.nameCollection.isEmpty && event.nameCollection.isEmpty) {
         emit(
           state.copyWith(
-            collectionsState: CollectionsStateEnum.success,
+            collectionsState: CollectionsStateEnum.loadAdd,
+            iShowDialog: true,
+            card: event.card,
           ),
         );
+      } else {
+        try {
+          emit(state.copyWith(collectionsState: CollectionsStateEnum.loadAdd, card: event.card));
+
+          final nameCollection =
+              event.nameCollection.isEmpty ? state.nameCollection : event.nameCollection;
+          // TODO: need future becouse show animaion
+          await Future.delayed(const Duration(milliseconds: 300), () {});
+          final cardsCollection = await _dbRepository.createCollection(
+            nameCollection,
+            event.card,
+            state.parameter,
+          );
+
+          emit(
+            state.copyWith(
+              cardsCollection: cardsCollection,
+              collectionsState: CollectionsStateEnum.success,
+            ),
+          );
+        } on CollectionLimitExceededException catch (e) {
+          emit(
+            state.copyWith(
+                collectionsState: CollectionsStateEnum.success, isShowRule: true, error: e),
+          );
+        } on CardsLimitExceededException catch (e) {
+          emit(state.copyWith(
+              collectionsState: CollectionsStateEnum.success, isShowRule: true, error: e));
+        } on SameCardsException catch (e) {
+          emit(
+            state.copyWith(
+                collectionsState: CollectionsStateEnum.success, isShowRule: true, error: e),
+          );
+        } catch (e) {
+          emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
+        }
+      }
+    });
+
+    on<DeleteCard>((event, emit) async {
+      emit(state.copyWith(
+        collectionsState: CollectionsStateEnum.loadDelete,
+        card: event.card,
+      ));
+      final nameCollection =
+          event.nameCollection.isEmpty ? state.nameCollection : event.nameCollection;
+
+      try {
+        if (nameCollection.isEmpty) {
+          emit(
+            state.copyWith(
+              collectionsState: CollectionsStateEnum.success,
+              isShowRule: true,
+              error: const NoCollectionException(),
+            ),
+          );
+        } else {
+          // TODO: need future becouse show animaion
+
+          await Future.delayed(const Duration(milliseconds: 300), () {});
+          final cardsCollection = await _dbRepository.deleteCard(
+            nameCollection: nameCollection,
+            heroType: state.parameter,
+            card: event.card,
+            cardId: event.cardId,
+          );
+
+          emit(
+            state.copyWith(
+              collectionsState: CollectionsStateEnum.success,
+              cardsCollection: cardsCollection,
+            ),
+          );
+        }
+      } on CollectionLimitExceededException catch (e) {
+        emit(state.copyWith(
+            collectionsState: CollectionsStateEnum.success, isShowRule: true, error: e));
+      } on CardsLimitExceededException catch (e) {
+        emit(state.copyWith(
+            collectionsState: CollectionsStateEnum.success, isShowRule: true, error: e));
+      } on NoElementException catch (e) {
+        emit(state.copyWith(
+            collectionsState: CollectionsStateEnum.success, isShowRule: true, error: e));
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
       }
@@ -59,12 +177,21 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<GetCardsCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        // TODO: Get Cards Collection in BD
+        final cardsCollection = await _dbRepository.getCollection(
+          event.nameCollection,
+          state.parameter,
+        );
+
         emit(
           state.copyWith(
+            nameCollection: event.nameCollection,
+            cardsCollection: cardsCollection,
             collectionsState: CollectionsStateEnum.success,
           ),
         );
+      } on NoElementException catch (e) {
+        emit(state.copyWith(
+            collectionsState: CollectionsStateEnum.success, isShowRule: true, error: e));
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
       }
@@ -73,12 +200,13 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<GetCollections>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        // TODO: Get  Collectionы in BD
+        final listCollections = await _dbRepository.getCollections(event.heroType);
 
         emit(
           state.copyWith(
             parameter: event.heroType,
-            //listCollections: listCollections,
+            listCollections: listCollections,
+            cardsCollection: [],
             collectionsState: CollectionsStateEnum.success,
           ),
         );
@@ -90,16 +218,9 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<DeleteCardsCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        // TODO: Delete  collection in BD
-
-        emit(
-          state.copyWith(
-            // cardsCollection: [],
-            // listCollections: listCollections,
-            collectionsState: CollectionsStateEnum.success,
-            isDeletedCollection: true,
-          ),
-        );
+        await _dbRepository
+            .deleteCollection(event.nameCollection ?? '', state.parameter)
+            .then((value) => add(GetCollections(state.parameter)));
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
       }
@@ -110,6 +231,50 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
         collectionsState: CollectionsStateEnum.success,
         content: event.typeContent,
       ));
+    });
+
+    on<GetCardsByFilter>((event, emit) async {
+      emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
+
+      try {
+        final selectedCoins = event.filter;
+        List<CollectionCard>? cardsCollection = [];
+        List<CardByParams>? listCards = [];
+
+        if (selectedCoins.isNotEmpty) {
+          if (event.isCollectionCards!) {
+            cardsCollection = await _dbRepository.getCardsByFilter(
+                state.nameCollection, state.parameter, event.filter);
+            listCards = state.listCards;
+          } else {
+            listCards = await _cardsRepository.fetchCardByCost(
+              'classes/${state.parameter}',
+              event.filter,
+            );
+            cardsCollection = state.cardsCollection;
+          }
+        } else {
+          if (event.isCollectionCards!) {
+            cardsCollection = await _dbRepository.getCollection(
+              state.nameCollection,
+              state.parameter,
+            );
+          } else {
+            listCards = await _cardsRepository.fetchCardByParams('classes/${state.parameter}');
+          }
+        }
+
+        selectedCoins.sort();
+
+        emit(state.copyWith(
+          listCards: listCards,
+          cardsCollection: cardsCollection,
+          selectedCoins: selectedCoins,
+          collectionsState: CollectionsStateEnum.success,
+        ));
+      } catch (e) {
+        emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
+      }
     });
   }
 }

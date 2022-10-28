@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hs/features/collections/widgets/collection_error_widget.dart';
 
 import 'package:flutter_hs/ui_kit/background_container.dart';
 import 'package:flutter_hs/ui_kit/custom_error_widget.dart';
@@ -16,6 +17,7 @@ import 'collections_details/all_cards_collection/all_cards_collection_screen.dar
 import 'collections_details/collection_screen/collection_screen.dart';
 import 'collections_details/collections_details_screen.dart';
 import 'collections_details/old_collections_screen.dart/old_collections_screen.dart';
+import 'widgets/collection_app_bar.dart';
 import 'widgets/custom_dialog_widget.dart';
 import 'widgets/inform_message.dart';
 
@@ -76,7 +78,15 @@ class _MainCollectionsScreenState extends State<MainCollectionsScreen> {
                     );
                   }
                   if (state.collectionsState == CollectionsStateEnum.error) {
-                    return CustomErrorWidget(textError: localizations.failedFetchCards);
+                    return Column(
+                      children: [
+                        CollectionAppBar(
+                          title: localizations.cardsCollections,
+                          contentEnum: CollectionsContentEnum.initialScreen,
+                        ),
+                        CollectionErrorWidget(textError: localizations.failedFetchCards),
+                      ],
+                    );
                   }
                   if (state.collectionsState == CollectionsStateEnum.success ||
                       state.collectionsState == CollectionsStateEnum.loadAdd ||
@@ -121,9 +131,9 @@ class _MainCollectionsScreenState extends State<MainCollectionsScreen> {
         builder: (_) => CustomDialogWidget(
           onTapOk: (String value) {
             if (value.isNotEmpty) {
-              //TODO: add collection
-              // BlocProvider.of<CardsCollectionsBloc>(context)
-              //     .add(CreateCollection(nameCollection: value));
+              final bloc = BlocProvider.of<CardsCollectionsBloc>(context);
+
+              bloc.add(CreateCollection(nameCollection: value, card: bloc.state.card));
             } else {
               _showMessage(context, text: context.localizations!.collectionsDidNotCreate);
             }

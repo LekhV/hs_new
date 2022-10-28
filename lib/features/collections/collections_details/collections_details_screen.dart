@@ -22,6 +22,7 @@ class CollectionDetailsScreen extends StatefulWidget {
 }
 
 class _CollectionDetailsScreenState extends State<CollectionDetailsScreen> {
+  CardsCollectionsBloc get bloc => BlocProvider.of<CardsCollectionsBloc>(context);
   @override
   Widget build(BuildContext context) {
     final localizations = context.localizations!;
@@ -38,7 +39,6 @@ class _CollectionDetailsScreenState extends State<CollectionDetailsScreen> {
           title: localizations.createCardsCollection,
           onTap: () {
             //TODO: change content and get cards
-            final bloc = BlocProvider.of<CardsCollectionsBloc>(context);
             bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.newCollection));
             bloc.add(CardsFetched(parameter: widget.classes.first, isShowDialog: true));
           },
@@ -48,9 +48,8 @@ class _CollectionDetailsScreenState extends State<CollectionDetailsScreen> {
           title: localizations.showCardsCollections,
           onTap: () {
             //TODO: change content and get collections
-            final bloc = BlocProvider.of<CardsCollectionsBloc>(context);
             bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.oldCollections));
-            // bloc.add(GetCollections(widget.classes.first));
+            bloc.add(GetCollections(widget.classes.first));
           },
         ),
       ],

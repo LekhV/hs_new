@@ -19,7 +19,8 @@ class CardsFetched extends CardsCollectionsEvent {
 
 class CreateCollection extends CardsCollectionsEvent {
   final String nameCollection;
-  const CreateCollection({required this.nameCollection});
+  final CardByParams? card;
+  const CreateCollection({required this.nameCollection, this.card});
 
   @override
   List<Object> get props => [nameCollection];
@@ -27,7 +28,9 @@ class CreateCollection extends CardsCollectionsEvent {
 
 class AddCard extends CardsCollectionsEvent {
   final CardByParams card;
-  const AddCard({required this.card});
+  final String nameCollection;
+
+  const AddCard({required this.card, required this.nameCollection});
 
   @override
   List<Object> get props => [];
@@ -35,13 +38,20 @@ class AddCard extends CardsCollectionsEvent {
 
 class DeleteCard extends CardsCollectionsEvent {
   final CardByParams card;
-  const DeleteCard({required this.card});
+  final dynamic cardId;
+  final String nameCollection;
+
+  const DeleteCard({required this.card, required this.cardId, required this.nameCollection});
 
   @override
   List<Object> get props => [];
 }
 
 class GetCardsCollection extends CardsCollectionsEvent {
+  final String nameCollection;
+
+  const GetCardsCollection({required this.nameCollection});
+
   @override
   List<Object> get props => [];
 }
@@ -71,6 +81,19 @@ class ChangeContent extends CardsCollectionsEvent {
 
   const ChangeContent({
     required this.typeContent,
+  });
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetCardsByFilter extends CardsCollectionsEvent {
+  final List<int> filter;
+  final bool? isCollectionCards;
+
+  const GetCardsByFilter({
+    required this.filter,
+    this.isCollectionCards = false,
   });
 
   @override

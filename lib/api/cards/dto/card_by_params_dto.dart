@@ -12,7 +12,7 @@ class CardByParamsDTO {
     this.type,
     this.faction,
     this.rarity,
-    this.cost,
+    this.cost = 0,
     this.attack,
     this.health,
     this.text,

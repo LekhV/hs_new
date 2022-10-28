@@ -15,7 +15,7 @@ CardByParamsDTO _$CardByParamsDTOFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String?,
       faction: json['faction'] as String?,
       rarity: json['rarity'] as String?,
-      cost: json['cost'] as int?,
+      cost: json['cost'] as int? ?? 0,
       attack: json['attack'] as int?,
       health: json['health'] as int?,
       text: json['text'] as String?,

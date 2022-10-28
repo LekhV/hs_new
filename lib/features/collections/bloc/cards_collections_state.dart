@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
 
 import '../collection_content_enum.dart';
 
@@ -12,13 +14,15 @@ class CardsCollectionsState extends Equatable {
 
   final CardByParams? card;
   final List<CardByParams>? listCards;
-  // final List<CollectionCard>? cardsCollection;
-  // final List<CollectionsModel>? listCollections;
+  final List<CollectionCard>? cardsCollection;
+  final List<CollectionModel>? listCollections;
 
   final String parameter;
   final String nameCollection;
   final bool isShowRule;
   final bool iShowDialog;
+
+  final List<int>? selectedCoins;
 
   final CollectionsContentEnum content;
 
@@ -29,10 +33,11 @@ class CardsCollectionsState extends Equatable {
     this.parameter = '',
     this.nameCollection = '',
     this.card,
-    // this.cardsCollection,
-    // this.listCollections,
+    this.cardsCollection,
+    this.listCollections,
     this.isShowRule = false,
     this.iShowDialog = false,
+    this.selectedCoins = const [],
     this.content = CollectionsContentEnum.initialScreen,
   });
 
@@ -43,11 +48,11 @@ class CardsCollectionsState extends Equatable {
     String? parameter,
     String? nameCollection,
     CardByParams? card,
-    // List<CollectionCard>? cardsCollection,
-    // List<CollectionsModel>? listCollections,
+    List<CollectionCard>? cardsCollection,
+    List<CollectionModel>? listCollections,
     bool? isShowRule,
-    bool? isDeletedCollection,
     bool? iShowDialog,
+    List<int>? selectedCoins,
     CollectionsContentEnum? content,
   }) =>
       CardsCollectionsState(
@@ -56,12 +61,13 @@ class CardsCollectionsState extends Equatable {
         listCards: listCards ?? this.listCards,
         parameter: parameter ?? this.parameter,
         nameCollection: nameCollection ?? this.nameCollection,
-        card: card ?? this.card,
-        // cardsCollection: cardsCollection ?? this.cardsCollection,
-        // listCollections: listCollections ?? this.listCollections,
+        card: card,
+        cardsCollection: cardsCollection ?? this.cardsCollection,
+        listCollections: listCollections ?? this.listCollections,
         isShowRule: isShowRule ?? false,
         iShowDialog: iShowDialog ?? false,
         content: content ?? this.content,
+        selectedCoins: selectedCoins ?? selectedCoins,
       );
 
   @override

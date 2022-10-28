@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../infrastructure/theme/app_colors.dart';
 import '../../bloc/cards_collections_bloc.dart';
+import '../../bloc/cards_collections_event.dart';
 import '../../bloc/cards_collections_state.dart';
 import '../../collection_content_enum.dart';
 import '../../widgets/collection_app_bar.dart';
+import '../../widgets/collection_error_widget.dart';
 
 class OldCollectionsScreen extends StatefulWidget {
   const OldCollectionsScreen({
@@ -42,47 +45,46 @@ class _OldCollectionsScreenState extends State<OldCollectionsScreen> {
             setState(() {
               title = item;
             });
-            //TODO: update collections
-            //bloc.add(GetCollections(item));
+            bloc.add(GetCollections(item));
           },
         ),
-
-        // TODO: show list collecions
-        // if (widget.state.listCollections == null || widget.state.listCollections!.isEmpty) ...{
-        //   const CollectionErrorWidget(),
-        // } else ...{
-        //   _contentBuild(context),
-        // }
+        if (widget.state.listCollections == null || widget.state.listCollections!.isEmpty) ...{
+          const CollectionErrorWidget(),
+        } else ...{
+          Expanded(
+            child: _contentBuild(context),
+          ),
+        }
       ],
     );
   }
 
-  // Widget _contentBuild(BuildContext context) {
-  //   return ListView.builder(
-  //     shrinkWrap: true,
-  //     itemCount: widget.state.listCollections!.length,
-  //     itemBuilder: (_, i) => Padding(
-  //       padding: const EdgeInsets.symmetric(vertical: 10),
-  //       child: InkWell(
-  //         onTap: () {
-  //           bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.oldCollection));
-  //           bloc.add(
-  //             GetCardsCollection(
-  //               nameCollection: widget.state.listCollections?[i].nameCollection ?? '',
-  //             ),
-  //           );
-  //         },
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Expanded(child: Text(widget.state.listCollections?[i].nameCollection ?? '')),
-  //             const SizedBox(width: 10),
-  //             Text('${widget.state.listCollections?[i].lenghtCollection.toString()}/10'),
-  //             const Icon(Icons.arrow_right, color: AppColors.white)
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _contentBuild(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: widget.state.listCollections!.length,
+      itemBuilder: (_, index) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: InkWell(
+          onTap: () {
+            bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.oldCollection));
+            bloc.add(
+              GetCardsCollection(
+                nameCollection: widget.state.listCollections?[index].nameCollection ?? '',
+              ),
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: Text(widget.state.listCollections?[index].nameCollection ?? '')),
+              const SizedBox(width: 10),
+              Text('${widget.state.listCollections?[index].collectionCardsLenght.toString()}/10'),
+              const Icon(Icons.arrow_right, color: AppColors.white)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
