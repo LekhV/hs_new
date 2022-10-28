@@ -18,4 +18,12 @@ abstract class DBSQLiteRepository {
 
   Future<List<CollectionCard>> getCollection(String nameCollection, String heroType);
   Future<List<CollectionModel>> getCollections(String heroType);
+
+  Future<List<String>> getNamesAllCollections(String heroType);
+
+  Future<List<CollectionCard>> getCardsByFilter(
+    String nameCollection,
+    String heroType,
+    List<int> selectedCoins,
+  );
 }

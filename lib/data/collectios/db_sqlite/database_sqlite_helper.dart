@@ -2,7 +2,9 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseSQLiteHelper {
-  final _databaseName = "cardb.db";
+  // join(await getDatabasesPath(), '16hs_collections.db'),
+
+  final _databaseName = '19hs_collections.db';
   final _databaseVersion = 1;
 
   final _cardsTableName = 'Cards';
@@ -75,12 +77,11 @@ class DatabaseSQLiteHelper {
     }
 
     return openDatabase(
-      // join(await getDatabasesPath(), '16hs_collections.db'),
-      join(await getDatabasesPath(), '19hs_collections.db'),
+      join(await getDatabasesPath(), _databaseName),
       onCreate: (db, version) {
-        return _createDB(db, 1);
+        return _createDB(db, _databaseVersion);
       },
-      version: 1,
+      version: _databaseVersion,
     );
   }
 
