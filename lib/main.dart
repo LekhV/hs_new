@@ -12,8 +12,8 @@ import 'infrastructure/theme/light_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final directory = await getApplicationDocumentsDirectory();
-  Hive.init(directory.path);
+  //final directory = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter();
 
   configureDependencies();
   runApp(const MyApp());

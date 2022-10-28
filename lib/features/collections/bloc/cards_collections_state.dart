@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
-import 'package:flutter_hs/domain/db_hive/models/collection_model.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
 
-import '../../../domain/db_hive/models/collection_card_model.dart';
 import '../collection_content_enum.dart';
 
 enum CollectionsStateEnum { init, loadAdd, loadDelete, success, error }
@@ -22,6 +22,8 @@ class CardsCollectionsState extends Equatable {
   final bool isShowRule;
   final bool iShowDialog;
 
+  final List<int>? selectedCoins;
+
   final CollectionsContentEnum content;
 
   const CardsCollectionsState({
@@ -35,6 +37,7 @@ class CardsCollectionsState extends Equatable {
     this.listCollections,
     this.isShowRule = false,
     this.iShowDialog = false,
+    this.selectedCoins = const [],
     this.content = CollectionsContentEnum.initialScreen,
   });
 
@@ -48,8 +51,8 @@ class CardsCollectionsState extends Equatable {
     List<CollectionCard>? cardsCollection,
     List<CollectionModel>? listCollections,
     bool? isShowRule,
-    bool? isDeletedCollection,
     bool? iShowDialog,
+    List<int>? selectedCoins,
     CollectionsContentEnum? content,
   }) =>
       CardsCollectionsState(
@@ -64,6 +67,7 @@ class CardsCollectionsState extends Equatable {
         isShowRule: isShowRule ?? false,
         iShowDialog: iShowDialog ?? false,
         content: content ?? this.content,
+        selectedCoins: selectedCoins ?? selectedCoins,
       );
 
   @override

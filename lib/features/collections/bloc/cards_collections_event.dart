@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
-import 'package:flutter_hs/domain/db_hive/models/collection_card_model.dart';
 
 import '../collection_content_enum.dart';
 
@@ -20,7 +19,8 @@ class CardsFetched extends CardsCollectionsEvent {
 
 class CreateCollection extends CardsCollectionsEvent {
   final String nameCollection;
-  const CreateCollection({required this.nameCollection});
+  final CardByParams? card;
+  const CreateCollection({required this.nameCollection, this.card});
 
   @override
   List<Object> get props => [nameCollection];
@@ -38,7 +38,7 @@ class AddCard extends CardsCollectionsEvent {
 
 class DeleteCard extends CardsCollectionsEvent {
   final CardByParams card;
-  final String cardId;
+  final dynamic cardId;
   final String nameCollection;
 
   const DeleteCard({required this.card, required this.cardId, required this.nameCollection});
@@ -81,6 +81,19 @@ class ChangeContent extends CardsCollectionsEvent {
 
   const ChangeContent({
     required this.typeContent,
+  });
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetCardsByFilter extends CardsCollectionsEvent {
+  final List<int> filter;
+  final bool? isCollectionCards;
+
+  const GetCardsByFilter({
+    required this.filter,
+    this.isCollectionCards = false,
   });
 
   @override
