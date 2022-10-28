@@ -17,5 +17,5 @@ class CollectionModelDTO extends HiveObject {
   @HiveField(1)
   final String heroType;
   @HiveField(2)
-  final List<CollectionCardDTO>? collectionCards;
+  List<CollectionCardDTO>? collectionCards;
 }

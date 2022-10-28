@@ -1,7 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 class DatabaseHiveHelper {
-  final _hiveCollection = 'CollectionsHSs';
+  //final _hiveCollection = 'CollectionsHSs';
+
+  final _hiveCollection = 'newsCollectionHS';
   Future<Box<dynamic>> _initDataBase() async {
     return Hive.openBox(_hiveCollection);
   }

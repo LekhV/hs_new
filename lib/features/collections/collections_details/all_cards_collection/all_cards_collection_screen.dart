@@ -11,6 +11,7 @@ import '../../bloc/cards_collections_state.dart';
 import '../../collection_content_enum.dart';
 import '../../widgets/collection_app_bar.dart';
 import '../../widgets/collection_error_widget.dart';
+import '../../widgets/cost_widget.dart';
 import '../../widgets/inform_message.dart';
 import '../../widgets/item_card_widget.dart';
 
@@ -54,6 +55,15 @@ class _AllCardCollectionScreenState extends State<AllCardCollectionScreen> {
               ? CollectionsContentEnum.initialScreen
               : CollectionsContentEnum.oldCollection,
           classes: widget.classes,
+          isShowFilter: !widget.isShowButton,
+          onTapLeading: () {
+            if (!widget.isShowButton) {
+              bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.oldCollection));
+              bloc.add(GetCardsCollection(nameCollection: widget.state.nameCollection));
+            } else {
+              null;
+            }
+          },
           onPressActions: (item) {
             setState(() {
               title = item;
@@ -75,7 +85,13 @@ class _AllCardCollectionScreenState extends State<AllCardCollectionScreen> {
 
     return Expanded(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (widget.state.selectedCoins != null && widget.state.selectedCoins!.isNotEmpty)
+            Wrap(
+              children:
+                  widget.state.selectedCoins!.map((e) => CostWidget(text: e.toString())).toList(),
+            ),
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
@@ -115,12 +131,13 @@ class _AllCardCollectionScreenState extends State<AllCardCollectionScreen> {
                   ),
                 ),
                 onPressed: () {
-                  if (widget.state.nameCollection.isNotEmpty) {
-                    //TODO:  get collection
+                  if (widget.state.nameCollection.isEmpty ||
+                      widget.state.cardsCollection == null ||
+                      widget.state.cardsCollection!.isEmpty) {
+                    _showMessage(context, localizations.collectionsDidNotCreate);
+                  } else {
                     bloc.add(const ChangeContent(typeContent: CollectionsContentEnum.collection));
                     bloc.add(GetCardsCollection(nameCollection: widget.state.nameCollection));
-                  } else {
-                    _showMessage(context, localizations.collectionsDidNotCreate);
                   }
                 },
               ),

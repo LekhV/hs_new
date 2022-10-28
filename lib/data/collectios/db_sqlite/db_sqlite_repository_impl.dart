@@ -24,13 +24,13 @@ class DBSQLiteRepositoryImpl implements DBSQLiteRepository {
   }) async {
     try {
       Database db = await sqliteHelper.database;
+      final collectionId = await _getIdCollection(nameCollection, heroType);
 
       if (cardId != null) {
         await db.delete(cardsTableName, where: "${sqliteHelper.collectionCardId} LIKE '$cardId'");
       } else {
         //TODO: check 0 and delete when 0 items
         Database db = await sqliteHelper.database;
-        final collectionId = await _getIdCollection(nameCollection, heroType);
 
         final checkList = await _getSQLiteCards(db, collectionId).then((collection) =>
             collection.where((collection) => collection.card?.cardId == card.cardId).toList());
@@ -43,9 +43,12 @@ class DBSQLiteRepositoryImpl implements DBSQLiteRepository {
       }
 
       final cardsCollection = await getCollection(nameCollection, heroType);
+      await _updateCollection(collectionId, cardsCollection.length);
+
       if (cardsCollection.isEmpty) {
         deleteCollection(nameCollection, heroType);
       }
+
       return cardsCollection;
     } catch (e) {
       rethrow;
@@ -213,6 +216,31 @@ class DBSQLiteRepositoryImpl implements DBSQLiteRepository {
       final collections =
           sqliteCollections.map((card) => SQLiteCollectionModel.fromJson(card)).toList().toModels();
       return collections.map((e) => e.nameCollection).toList();
+    } catch (e) {
+      throw UnimplementedError();
+    }
+  }
+
+  @override
+  Future<List<CollectionCard>> getCardsByFilter(
+      String nameCollection, String heroType, List<int> selectedCoins) async {
+    try {
+      Database db = await sqliteHelper.database;
+      final collectionModelId = await _getIdCollection(nameCollection, heroType);
+
+      final sqliteCardsDTO = await db.query(
+        cardsTableName,
+        where:
+            "${sqliteHelper.collectionModelId} = '$collectionModelId' AND ${sqliteHelper.cost} = ?",
+        whereArgs: selectedCoins,
+      );
+
+      final sqliteCards = sqliteCardsDTO
+          .map((cardDTO) => SQLiteCollectionCardDTO.fromJson(cardDTO))
+          .toList()
+          .toModels();
+
+      return sqliteCards.toModels();
     } catch (e) {
       throw UnimplementedError();
     }

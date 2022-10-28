@@ -5,4 +5,5 @@ enum CollectionsContentEnum {
   collection,
   oldCollection,
   allCards,
+  filterScreen,
 }

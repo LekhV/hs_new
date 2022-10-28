@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_hs/domain/cards/cards_repository.dart';
+import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
+import 'package:flutter_hs/domain/collections/db_drift/db_drift_repository.dart';
 import 'package:flutter_hs/domain/collections/db_hive/db_hive_repository.dart';
 import 'package:flutter_hs/domain/collections/db_realm/db_realm_repository.dart';
 import 'package:flutter_hs/domain/collections/db_sqlite/db_sqlite_repository.dart';
+import 'package:flutter_hs/domain/collections/models/db_collection_card_model.dart';
 
 import 'package:get_it/get_it.dart';
 
@@ -12,9 +15,10 @@ import 'cards_collections_state.dart';
 
 class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsState> {
   final _cardsRepository = GetIt.instance.get<CardsRepository>();
-  final _dbRepository = GetIt.instance.get<DBHiveRepository>();
-  //GetIt.instance.get<DBSQLiteRepository>();
-  //GetIt.instance.get<DBRealmRepository>();
+  final _dbRepository = //GetIt.instance.get<DBHiveRepository>();
+      // GetIt.instance.get<DBSQLiteRepository>();
+      //GetIt.instance.get<DBRealmRepository>();
+      GetIt.instance.get<DBDriftRepository>();
 
   CardsCollectionsBloc() : super(const CardsCollectionsState()) {
     on<CardsFetched>((event, emit) async {
@@ -63,8 +67,8 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
           );
         }
 
-        if (state.card != null) {
-          add(AddCard(card: state.card!, nameCollection: event.nameCollection));
+        if (event.card != null) {
+          add(AddCard(card: event.card!, nameCollection: event.nameCollection));
         }
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
@@ -214,8 +218,9 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
     on<DeleteCardsCollection>((event, emit) async {
       emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
       try {
-        await _dbRepository.deleteCollection(event.nameCollection ?? '', state.parameter);
-        add(GetCollections(state.parameter));
+        await _dbRepository
+            .deleteCollection(event.nameCollection ?? '', state.parameter)
+            .then((value) => add(GetCollections(state.parameter)));
       } catch (e) {
         emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
       }
@@ -226,6 +231,50 @@ class CardsCollectionsBloc extends Bloc<CardsCollectionsEvent, CardsCollectionsS
         collectionsState: CollectionsStateEnum.success,
         content: event.typeContent,
       ));
+    });
+
+    on<GetCardsByFilter>((event, emit) async {
+      emit(state.copyWith(collectionsState: CollectionsStateEnum.init));
+
+      try {
+        final selectedCoins = event.filter;
+        List<CollectionCard>? cardsCollection = [];
+        List<CardByParams>? listCards = [];
+
+        if (selectedCoins.isNotEmpty) {
+          if (event.isCollectionCards!) {
+            cardsCollection = await _dbRepository.getCardsByFilter(
+                state.nameCollection, state.parameter, event.filter);
+            listCards = state.listCards;
+          } else {
+            listCards = await _cardsRepository.fetchCardByCost(
+              'classes/${state.parameter}',
+              event.filter,
+            );
+            cardsCollection = state.cardsCollection;
+          }
+        } else {
+          if (event.isCollectionCards!) {
+            cardsCollection = await _dbRepository.getCollection(
+              state.nameCollection,
+              state.parameter,
+            );
+          } else {
+            listCards = await _cardsRepository.fetchCardByParams('classes/${state.parameter}');
+          }
+        }
+
+        selectedCoins.sort();
+
+        emit(state.copyWith(
+          listCards: listCards,
+          cardsCollection: cardsCollection,
+          selectedCoins: selectedCoins,
+          collectionsState: CollectionsStateEnum.success,
+        ));
+      } catch (e) {
+        emit(state.copyWith(collectionsState: CollectionsStateEnum.error, error: e));
+      }
     });
   }
 }

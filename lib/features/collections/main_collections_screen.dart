@@ -131,9 +131,9 @@ class _MainCollectionsScreenState extends State<MainCollectionsScreen> {
         builder: (_) => CustomDialogWidget(
           onTapOk: (String value) {
             if (value.isNotEmpty) {
-              //TODO: add collection
-              BlocProvider.of<CardsCollectionsBloc>(context)
-                  .add(CreateCollection(nameCollection: value));
+              final bloc = BlocProvider.of<CardsCollectionsBloc>(context);
+
+              bloc.add(CreateCollection(nameCollection: value, card: bloc.state.card));
             } else {
               _showMessage(context, text: context.localizations!.collectionsDidNotCreate);
             }
