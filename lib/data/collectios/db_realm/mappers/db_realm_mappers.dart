@@ -1,4 +1,3 @@
-import 'package:flutter_hs/api/collections/db_realm/dtos/realm_card_dto.dart';
 import 'package:flutter_hs/api/collections/db_realm/dtos/realm_collection_card_dto.dart';
 import 'package:flutter_hs/api/collections/db_realm/dtos/realm_collection_model_dto.dart';
 import 'package:flutter_hs/domain/cards/models/card_by_params.dart';
@@ -7,8 +6,10 @@ import 'package:flutter_hs/domain/collections/models/db_collection_card_model.da
 import 'package:flutter_hs/domain/collections/models/db_collection_model.dart';
 
 extension CardMapper on CardByParams {
-  RealmCardDTO toDTO() {
-    return RealmCardDTO(
+  RealmCollectionCardDTO toDTO(String collectionCardId, String nameCollection) {
+    return RealmCollectionCardDTO(
+      collectionCardId,
+      nameCollection,
       cardId: cardId,
       dbfId: dbfId,
       name: name,
@@ -32,48 +33,68 @@ extension CardMapper on CardByParams {
   }
 }
 
-extension CardMappers on List<CardByParams> {
-  List<RealmCardDTO> toDTOs() {
-    return map((cardByParamsDTO) => cardByParamsDTO.toDTO()).toList();
-  }
-}
+// extension CardMappers on List<CardByParams> {
+//   List<RealmCollectionCardDTO> toDTOs() {
+//     return map((cardByParamsDTO) => cardByParamsDTO.toDTO()).toList();
+//   }
+// }
 
-extension CardDTOMapper on RealmCardDTO {
-  CardByParams toModel() {
-    return CardByParams(
-      cardId: cardId,
-      dbfId: dbfId,
-      name: name,
-      cardSet: cardSet,
-      type: type,
-      faction: faction,
-      rarity: rarity,
-      cost: cost,
-      attack: attack,
-      health: health,
-      text: text,
-      flavor: flavor,
-      artist: artist,
-      collectible: collectible,
-      elite: elite,
-      playerClass: playerClass,
-      img: img,
-      imgGold: imgGold,
-      locale: locale,
-    );
-  }
-}
+// extension CardDTOMapper on RealmCardDTO {
+//   CardByParams toModel() {
+//     return CardByParams(
+//       cardId: cardId,
+//       dbfId: dbfId,
+//       name: name,
+//       cardSet: cardSet,
+//       type: type,
+//       faction: faction,
+//       rarity: rarity,
+//       cost: cost,
+//       attack: attack,
+//       health: health,
+//       text: text,
+//       flavor: flavor,
+//       artist: artist,
+//       collectible: collectible,
+//       elite: elite,
+//       playerClass: playerClass,
+//       img: img,
+//       imgGold: imgGold,
+//       locale: locale,
+//     );
+//   }
+// }
 
-extension CardDTOMappers on List<RealmCardDTO> {
-  List<CardByParams> toModels() {
-    return map((cardDTO) => cardDTO.toModel()).toList();
-  }
-}
+// extension CardDTOMappers on List<RealmCardDTO> {
+//   List<CardByParams> toModels() {
+//     return map((cardDTO) => cardDTO.toModel()).toList();
+//   }
+// }
 
 extension CollectionCardDTOMapper on RealmCollectionCardDTO {
   CollectionCard toModel() {
     return CollectionCard(
-      card: card!.toModel(),
+      card: CardByParams(
+        cardId: cardId,
+        dbfId: dbfId,
+        name: name,
+        cardSet: cardSet,
+        type: type,
+        faction: faction,
+        rarity: rarity,
+        cost: cost,
+        attack: attack,
+        health: health,
+        text: text,
+        flavor: flavor,
+        artist: artist,
+        collectible: collectible,
+        elite: elite,
+        playerClass: playerClass,
+        img: img,
+        imgGold: imgGold,
+        locale: locale,
+      ),
       collectionCardId: collectionCardId,
     );
   }

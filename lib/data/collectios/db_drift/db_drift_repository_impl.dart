@@ -192,4 +192,28 @@ class DBDriftRepositoryImpl implements DBDriftRepository {
 
     return cardsCollection.toModels();
   }
+
+  @override
+  Future<List<CollectionCard>> getCardsByFilter(
+    String nameCollection,
+    String heroType,
+    List<int> selectedCoins,
+  ) async {
+    try {
+      final collectionModelId = await _getIdCollection(nameCollection, heroType);
+
+      var database = await driftHelper.database;
+
+      final collection = database.select(database.driftCollectionCardDTO)
+        ..where((card) => card.collectionModelId.equals(collectionModelId));
+
+      final cards = collection..where((card) => card.cost.isIn(selectedCoins));
+
+      final cardsCollection = await cards.get();
+
+      return cardsCollection.toModels().toModels();
+    } catch (e) {
+      throw UnimplementedError();
+    }
+  }
 }

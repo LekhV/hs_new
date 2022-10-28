@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hs/features/collections/widgets/cost_widget.dart';
 
 import '../../../../infrastructure/theme/app_colors.dart';
 import '../../bloc/cards_collections_bloc.dart';
@@ -33,6 +34,8 @@ class CollectionScreen extends StatelessWidget {
           onTapLeading: () => isOldCollection
               ? BlocProvider.of<CardsCollectionsBloc>(context).add(GetCollections(state.parameter))
               : null,
+          isShowFilter: true,
+          isCollectionCards: true,
         ),
         if (state.cardsCollection == null || state.cardsCollection!.isEmpty)
           const CollectionErrorWidget(),
@@ -45,7 +48,12 @@ class CollectionScreen extends StatelessWidget {
   Widget _contentBuild(BuildContext context) {
     return Expanded(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (state.selectedCoins != null && state.selectedCoins!.isNotEmpty)
+            Wrap(
+              children: state.selectedCoins!.map((e) => CostWidget(text: e.toString())).toList(),
+            ),
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,

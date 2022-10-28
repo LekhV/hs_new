@@ -1,4 +1,3 @@
-import 'package:flutter_hs/api/collections/db_realm/dtos/realm_card_dto.dart';
 import 'package:flutter_hs/api/collections/db_realm/dtos/realm_collection_card_dto.dart';
 import 'package:flutter_hs/api/collections/db_realm/dtos/realm_collection_model_dto.dart';
 import 'package:flutter_hs/data/collectios/db_realm/mappers/db_realm_mappers.dart';
@@ -22,14 +21,13 @@ class DBRealmRepositoryImpl implements DBRealmRepository {
     try {
       var realm = Realm(await realmHelper.config);
 
-      RealmCardDTO cardDTO = card.toDTO();
       var collection = realm.find<RealmCollectionModelDTO>(nameCollection);
 
       if (collection == null) {
         RealmCollectionModelDTO newCollectionDTO = RealmCollectionModelDTO(
           nameCollection,
           heroType: heroType,
-          collectionCards: [RealmCollectionCardDTO(card.cardId!, card: cardDTO)],
+          collectionCards: [card.toDTO(card.cardId!, nameCollection)],
         );
 
         realm.write(() {
@@ -49,11 +47,9 @@ class DBRealmRepositoryImpl implements DBRealmRepository {
 
         realm.write(() {
           if (checkList.isEmpty) {
-            return collectionCards.add(RealmCollectionCardDTO(card.cardId!, card: cardDTO));
+            return collectionCards.add(card.toDTO(card.cardId!, nameCollection));
           } else if (checkList.length == 1) {
-            return collectionCards.add(
-              RealmCollectionCardDTO('${card.cardId} ${card.cardId}', card: cardDTO),
-            );
+            return collectionCards.add(card.toDTO('${card.cardId} ${card.cardId}', nameCollection));
           } else if (checkList.length == 2) {
             throw const CardsLimitExceededException();
           }
@@ -167,6 +163,35 @@ class DBRealmRepositoryImpl implements DBRealmRepository {
       final collections = realmCollections.toList().toModels();
 
       return collections.map((e) => e.nameCollection).toList();
+    } catch (e) {
+      throw UnimplementedError();
+    }
+  }
+
+  @override
+  Future<List<CollectionCard>> getCardsByFilter(
+    String nameCollection,
+    String heroType,
+    List<int> selectedCoins,
+  ) async {
+    try {
+      var realm = Realm(await realmHelper.config);
+      final filter = selectedCoins
+          .asMap()
+          .keys
+          .map((index) => "collectionId == '$nameCollection' && cost == \$$index")
+          .toList()
+          .join(' || ');
+
+      var realmCollection = realm
+          .find<RealmCollectionModelDTO>(nameCollection)!
+          .collectionCards
+          .query(filter, selectedCoins)
+          .toList();
+
+      List<CollectionCard>? collectionCards = realmCollection.toModels();
+
+      return collectionCards;
     } catch (e) {
       throw UnimplementedError();
     }

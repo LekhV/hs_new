@@ -220,4 +220,29 @@ class DBSQLiteRepositoryImpl implements DBSQLiteRepository {
       throw UnimplementedError();
     }
   }
+
+  @override
+  Future<List<CollectionCard>> getCardsByFilter(
+      String nameCollection, String heroType, List<int> selectedCoins) async {
+    try {
+      Database db = await sqliteHelper.database;
+      final collectionModelId = await _getIdCollection(nameCollection, heroType);
+
+      final sqliteCardsDTO = await db.query(
+        cardsTableName,
+        where:
+            "${sqliteHelper.collectionModelId} = '$collectionModelId' AND ${sqliteHelper.cost} = ?",
+        whereArgs: selectedCoins,
+      );
+
+      final sqliteCards = sqliteCardsDTO
+          .map((cardDTO) => SQLiteCollectionCardDTO.fromJson(cardDTO))
+          .toList()
+          .toModels();
+
+      return sqliteCards.toModels();
+    } catch (e) {
+      throw UnimplementedError();
+    }
+  }
 }

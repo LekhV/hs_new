@@ -22,6 +22,8 @@ class CardsCollectionsState extends Equatable {
   final bool isShowRule;
   final bool iShowDialog;
 
+  final List<int>? selectedCoins;
+
   final CollectionsContentEnum content;
 
   const CardsCollectionsState({
@@ -35,6 +37,7 @@ class CardsCollectionsState extends Equatable {
     this.listCollections,
     this.isShowRule = false,
     this.iShowDialog = false,
+    this.selectedCoins = const [],
     this.content = CollectionsContentEnum.initialScreen,
   });
 
@@ -49,6 +52,7 @@ class CardsCollectionsState extends Equatable {
     List<CollectionModel>? listCollections,
     bool? isShowRule,
     bool? iShowDialog,
+    List<int>? selectedCoins,
     CollectionsContentEnum? content,
   }) =>
       CardsCollectionsState(
@@ -63,6 +67,7 @@ class CardsCollectionsState extends Equatable {
         isShowRule: isShowRule ?? false,
         iShowDialog: iShowDialog ?? false,
         content: content ?? this.content,
+        selectedCoins: selectedCoins ?? selectedCoins,
       );
 
   @override
