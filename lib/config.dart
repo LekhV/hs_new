@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class AppConfig {
-  String baseUrl = 'https://omgvamp-hearthstone-v1.p.rapidapi.com/';
+  String baseUrl ='https://omgvamp-hearthstone-v1.p.rapidapi.com/';// 'https://omgvamp-hearthstone-v1.p.rapidapi.com/';
 
   String get mainImgHs => _mainImgHs;
   final String _mainImgHs =

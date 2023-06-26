@@ -27,7 +27,7 @@ class CardByParamsDTO {
   });
 
   String? cardId;
-  String? dbfId;
+  int? dbfId;
   String? name;
   String? cardSet;
   String? type;

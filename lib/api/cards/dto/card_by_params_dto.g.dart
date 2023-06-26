@@ -6,10 +6,9 @@ part of 'card_by_params_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CardByParamsDTO _$CardByParamsDTOFromJson(Map<String, dynamic> json) =>
-    CardByParamsDTO(
+CardByParamsDTO _$CardByParamsDTOFromJson(Map<String, dynamic> json) => CardByParamsDTO(
       cardId: json['cardId'] as String?,
-      dbfId: json['dbfId'] as String?,
+      dbfId: json['dbfId'] as int?,
       name: json['name'] as String?,
       cardSet: json['cardSet'] as String?,
       type: json['type'] as String?,
@@ -29,8 +28,7 @@ CardByParamsDTO _$CardByParamsDTOFromJson(Map<String, dynamic> json) =>
       locale: json['locale'] as String?,
     );
 
-Map<String, dynamic> _$CardByParamsDTOToJson(CardByParamsDTO instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$CardByParamsDTOToJson(CardByParamsDTO instance) => <String, dynamic>{
       'cardId': instance.cardId,
       'dbfId': instance.dbfId,
       'name': instance.name,

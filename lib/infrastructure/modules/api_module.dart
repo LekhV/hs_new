@@ -16,5 +16,8 @@ abstract class ApiModule {
 }
 
 Map<String, dynamic>? buildHeaders(AppConfig appConfig) {
-  return {'x-rapidapi-key': '336953abe4msh27e7637ce736e6ep12a161jsn2b11d7f74cc4'};
+  return {
+    'X-RapidAPI-Key': '9f149339a1msh638e1d9d27b2dcap193187jsn4a302d1ea34a',
+    'X-RapidAPI-Host': 'omgvamp-hearthstone-v1.p.rapidapi.com'
+  };
 }

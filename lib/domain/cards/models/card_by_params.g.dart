@@ -8,7 +8,7 @@ part of 'card_by_params.dart';
 
 CardByParams _$CardByParamsFromJson(Map<String, dynamic> json) => CardByParams(
       cardId: json['cardId'] as String?,
-      dbfId: json['dbfId'] as String?,
+      dbfId: json['dbfId'] as int?,
       name: json['name'] as String?,
       cardSet: json['cardSet'] as String?,
       type: json['type'] as String?,
@@ -28,8 +28,7 @@ CardByParams _$CardByParamsFromJson(Map<String, dynamic> json) => CardByParams(
       locale: json['locale'] as String?,
     );
 
-Map<String, dynamic> _$CardByParamsToJson(CardByParams instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$CardByParamsToJson(CardByParams instance) => <String, dynamic>{
       'cardId': instance.cardId,
       'dbfId': instance.dbfId,
       'name': instance.name,
